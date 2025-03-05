@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="BottomNavStyle" parent="Widget.MaterialComponents.BottomNavigationView">
+        <item name="itemTextAppearanceActive">@style/BottomNavText</item>
+        <item name="itemTextAppearanceInactive">@style/BottomNavText</item>
+        <item name="itemIconSize">24dp</item>
+    </style>
+
+    <style name="BottomNavText">
+        <item name="android:textSize">12sp</item>
+        <item name="android:textColor">@color/bottom_nav_color</item>
+    </style>
+
+</resources>
