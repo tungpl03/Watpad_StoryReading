@@ -5,9 +5,9 @@ public class ReadingHistory {
     private int storyId;
     private int chapterId;
     private boolean liked;
-    private int view;
+    private boolean view;
     private String lastReadAt;
-    public ReadingHistory(int userId, int storyId, int chapterId, boolean liked, int view, String lastReadAt) {
+    public ReadingHistory(int userId, int storyId, int chapterId, boolean liked, boolean view, String lastReadAt) {
         this.userId = userId;
         this.storyId = storyId;
         this.chapterId = chapterId;
@@ -48,11 +48,11 @@ public class ReadingHistory {
         this.liked = liked;
     }
 
-    public int getView() {
+    public boolean getView() {
         return view;
     }
 
-    public void setView(int view) {
+    public void setView(boolean view) {
         this.view = view;
     }
 
