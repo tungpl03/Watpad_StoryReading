@@ -28,7 +28,7 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.login);
         Init();
 
-        SP = getSharedPreferences("prmprefs", MODE_PRIVATE);
+        SP = getSharedPreferences("wadpadlogin", MODE_PRIVATE);
 
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override

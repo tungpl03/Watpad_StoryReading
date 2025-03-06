@@ -1,9 +1,13 @@
 package com.example.storywatpad.view;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.widget.TextView;
+import xyz.schwaab.avvylib.AvatarView;
 
+import com.example.storywatpad.model.User;
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -27,7 +31,10 @@ public class MainActivity extends AppCompatActivity {
     List<ReadingHistory> readingHistories = new ArrayList<>();
     StoryAdapter adapter,hotStoryAdapter;
     private DatabaseHandler db = new DatabaseHandler(this);
-
+    SharedPreferences SP;
+    User user;
+    TextView Name;
+    AvatarView avatarView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -37,11 +44,24 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.homepage);
 
         db.DB2SDCard();
-
+        SP = getSharedPreferences("wadpadlogin", MODE_PRIVATE);//KB in a fun, not out
+        user = getAccount(SP.getString("Email", ""), SP.getString("Password", ""));
         hotStories = getHotStories();
         arrStory = getAllStories();
         rvStory = (RecyclerView) findViewById(R.id.rvAllBook);
         rvHotStory = (RecyclerView) findViewById(R.id.rvHotStory);
+        Name = findViewById(R.id.Name);
+        Name.setText(user.getUsername());
+        avatarView = findViewById(R.id.avatarView);
+        String userAvatar = user.getDrawableImageName();
+        int imageResId = this.getResources().getIdentifier(userAvatar, "drawable", this.getPackageName());
+
+        if (imageResId != 0) {
+            avatarView.setImageResource(imageResId);
+        } else {
+            avatarView.setImageResource(R.drawable.logocomic);
+        }
+
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigationView);
 
         bottomNavigationView.setOnItemSelectedListener(item -> {
@@ -53,6 +73,8 @@ public class MainActivity extends AppCompatActivity {
             }
             return false;
         });
+
+        
         LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         rvHotStory.setLayoutManager(layoutManager);
         rvHotStory.setNestedScrollingEnabled(false);  // Cho phép cuộn ngang nếu danh sách dài hơn màn hình
@@ -64,8 +86,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private List<Story> getHotStories() {
-        List<Story> allStories = new ArrayList<>();
-        Cursor cursor = db.getCursor("SELECT *,sum(like) as totallike" +
+        List<Story> hotStories = new ArrayList<>();
+        Cursor cursor = db.getCursor("SELECT Story.*,sum(like) as totallike" +
                 " FROM Story JOIN ReadingHistory WHERE Story.StoryId = ReadingHistory.StoryId" +
                 " GROUP BY Story.StoryId" +
                 " ORDER BY totallike desc;");
@@ -85,11 +107,11 @@ public class MainActivity extends AppCompatActivity {
         }
         cursor.close();
 
-        return allStories;
+        return hotStories;
     }
 
     private List<Story> getAllStories() {
-        List<Story> hotStories = new ArrayList<>();
+        List<Story> allStories = new ArrayList<>();
         Cursor cursor = db.getCursor("SELECT * FROM Story");
         if (cursor.moveToFirst()) {
             do{
@@ -102,12 +124,36 @@ public class MainActivity extends AppCompatActivity {
                         cursor.getString(6),
                         cursor.getString(7),
                         cursor.getString(8));
-                hotStories.add(st);
+                allStories.add(st);
             }while (cursor.moveToNext());
         }
         cursor.close();
 
-        return hotStories;
+        return allStories;
+    }
+
+    private User getAccount(String email, String pass) {
+        Cursor cursor = db.getReadableDatabase().rawQuery(
+                "SELECT * FROM User WHERE Email = ? AND PasswordHash = ?",
+                new String[]{email, pass}
+        );
+
+        User user = null;
+
+        if (cursor.moveToFirst()) {
+            user = new User(cursor.getInt(0),
+                    cursor.getString(1),
+                    cursor.getString(2),
+                    cursor.getString(3),
+                    cursor.getString(4),
+                    cursor.getString(5),
+                    cursor.getString(6),
+                    cursor.getString(7),
+                    cursor.getString(8));
+        }
+
+        cursor.close(); // Đóng Cursor sau khi sử dụng
+        return user;
     }
     
 }
