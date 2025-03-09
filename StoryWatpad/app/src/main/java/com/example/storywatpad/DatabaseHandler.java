@@ -7,6 +7,8 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.example.storywatpad.model.User;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
@@ -83,6 +85,58 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         }
         cursor.close();
         return viewCount;
+    }
+
+    public User getAccount(String email, String pass) {
+        Cursor cursor = this.getReadableDatabase().rawQuery(
+                "SELECT * FROM User WHERE Email = ? AND PasswordHash = ?",
+                new String[]{email, pass}
+        );
+
+        User user = null;
+
+        if (cursor.moveToFirst()) {
+            user = new User(cursor.getInt(0),
+                    cursor.getString(1),
+                    cursor.getString(2),
+                    cursor.getString(3),
+                    cursor.getString(4),
+                    cursor.getString(5),
+                    cursor.getString(6),
+                    cursor.getString(7),
+                    cursor.getString(8));
+        }
+
+        cursor.close(); // Đóng Cursor sau khi sử dụng
+        return user;
+    }
+    public User getAccountWithEmail(String email) {
+        Cursor cursor = this.getReadableDatabase().rawQuery(
+                "SELECT * FROM User WHERE Email = ?",
+                new String[]{email}
+        );
+
+        User user = null;
+
+        if (cursor.moveToFirst()) {
+            user = new User(cursor.getInt(0),
+                    cursor.getString(1),
+                    cursor.getString(2),
+                    cursor.getString(3),
+                    cursor.getString(4),
+                    cursor.getString(5),
+                    cursor.getString(6),
+                    cursor.getString(7),
+                    cursor.getString(8));
+        }
+
+        cursor.close(); // Đóng Cursor sau khi sử dụng
+        return user;
+    }
+    public void changePassword(String email, String newPassword) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.execSQL("UPDATE User SET PasswordHash = ? WHERE Email = ?", new String[]{newPassword, email});
+        db.close();
     }
 
 }

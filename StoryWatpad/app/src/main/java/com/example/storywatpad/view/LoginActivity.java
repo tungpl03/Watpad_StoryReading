@@ -5,20 +5,23 @@ import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
+
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.AppCompatButton;
 
 import com.example.storywatpad.DatabaseHandler;
 import com.example.storywatpad.R;
 import com.example.storywatpad.model.User;
 
 public class LoginActivity extends AppCompatActivity {
-    Button btnLogin;
+    AppCompatButton btnLogin;
     EditText edtEmail, edtPassword;
     SharedPreferences SP;
+    TextView tvSignin, btnForgetPassword;
 
     DatabaseHandler db = new DatabaseHandler(this);
 
@@ -26,6 +29,9 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login);
+
+        db.DB2SDCard();
+
         Init();
 
         SP = getSharedPreferences("wadpadlogin", MODE_PRIVATE);
@@ -56,10 +62,33 @@ public class LoginActivity extends AppCompatActivity {
                                 Toast.LENGTH_LONG).show();
                     } else if ("admin".equals(user.getRole())) {
                         // Xử lý logic cho admin
+
+
+
+
+
                     }
                 }
             }
         });
+
+        btnForgetPassword.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent it = new Intent(LoginActivity.this, ForgetPasswordActivity.class);
+                startActivity(it);
+            }
+        });
+
+        tvSignin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent it = new Intent(LoginActivity.this, RegisterActivity.class);
+                startActivity(it);
+            }
+        });
+
+
     }
 
     private User getAccount(String email, String pass) {
@@ -89,6 +118,8 @@ public class LoginActivity extends AppCompatActivity {
     private void Init() {
         btnLogin = findViewById(R.id.login);
         edtEmail = findViewById(R.id.email);
+        tvSignin = findViewById(R.id.tvSignup);
         edtPassword = findViewById(R.id.edtPass);
+        btnForgetPassword = findViewById(R.id.btnForgetPassword);
     }
 }

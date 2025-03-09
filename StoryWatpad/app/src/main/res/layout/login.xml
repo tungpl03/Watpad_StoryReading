@@ -28,43 +28,86 @@
         android:id="@+id/edtPass"
         android:layout_width="287dp"
         android:layout_height="51dp"
+        android:background="@drawable/edittext_bg"
+        android:drawableLeft="@drawable/baseline_lock_24"
+        android:drawablePadding="8dp"
+        android:elevation="20dp"
         android:ems="10"
         android:hint="Password"
         android:inputType="textPassword"
         android:padding="8dp"
-        android:drawableLeft="@drawable/baseline_lock_24"
-        android:drawablePadding="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/email"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/email"
         app:layout_constraintTop_toBottomOf="@+id/email"
-        app:layout_constraintVertical_bias="0.103"
-        android:background="@drawable/edittext_bg"
-        android:elevation="20dp"/>
+        app:layout_constraintVertical_bias="0.1" />
 
-    <Button
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/login"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@drawable/edittext_bg"
+        android:layout_width="287dp"
+        android:layout_height="51dp"
+        android:background="@drawable/btn_background_3"
         android:text="Login"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/edtPass"
-        app:layout_constraintVertical_bias="0.518" />
+        app:layout_constraintVertical_bias="0.2" />
 
     <ImageView
         android:id="@+id/imageView4"
-        android:layout_width="184dp"
-        android:layout_height="158dp"
+        android:layout_width="160dp"
+        android:layout_height="160dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.134"
         app:srcCompat="@drawable/logocomic" />
+
+    <TextView
+        android:id="@+id/btnForgetPassword"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Forgot password?"
+        android:textSize="15sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.787"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/edtPass"
+        app:layout_constraintVertical_bias="0.05" />
+
+    <LinearLayout
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:gravity="center"
+        android:layout_marginTop="20dp"
+        app:layout_constraintVertical_bias="0"
+        android:textAlignment="center"
+        app:layout_constraintEnd_toEndOf="@+id/login"
+        app:layout_constraintStart_toStartOf="@+id/login"
+        app:layout_constraintTop_toBottomOf="@+id/login">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textColor="@color/black"
+            android:text="Don't have an Account?" />
+
+        <TextView
+            android:id="@+id/tvSignup"
+            android:layout_width="52dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textStyle="bold"
+            android:textColor="@color/red"
+            android:text="Sign up" />
+    </LinearLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

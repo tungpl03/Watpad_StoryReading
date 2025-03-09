@@ -51,4 +51,9 @@ dependencies {
 
     implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.5.1' // Optional: LiveData support
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1' // Optional: ViewModel support
+
+
+    implementation files('libs/activation.jar')
+    implementation files('libs/additionnal.jar')
+    implementation files('libs/mail.jar')
 }
