@@ -35,7 +35,12 @@
                 android:layout_height="50dp"
                 android:layout_weight="1"
                 android:text="Add a new story"
-                android:textSize="30dp" />
+                android:textSize="25dp"
+                android:gravity=""
+                android:textStyle="bold"
+                android:textColor="@color/black"
+                />
+
 
         </LinearLayout>
 

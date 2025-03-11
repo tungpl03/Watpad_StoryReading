@@ -19,7 +19,7 @@
             <!-- Bố cục chứa hình ảnh nền và profile -->
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="334dp">
+                android:layout_height="wrap_content">
 
                 <!-- Hình nền top -->
                 <ImageView
@@ -65,11 +65,24 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
                     android:text="lionfischer@gmail.com"
-                    android:textColor="#666666"
+                    android:textColor="@color/black"
                     android:textSize="18sp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/NameText" />
+
+                <!--bio -->
+                <TextView
+                    android:id="@+id/Bio"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="nothing in bio"
+                    android:textColor="#373535"
+                    android:textSize="18sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/EmailText" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -82,7 +95,7 @@
                 android:layout_marginTop="16dp">
 
                 <androidx.appcompat.widget.AppCompatButton
-                    android:id="@+id/button"
+                    android:id="@+id/storyByMe"
                     android:layout_width="match_parent"
                     android:layout_height="60dp"
                     android:background="@drawable/btn_background_1"
@@ -94,12 +107,11 @@
                     android:textAlignment="viewStart"/>
 
                 <androidx.appcompat.widget.AppCompatButton
-                    android:id="@+id/button2"
+                    android:id="@+id/anps"
                     android:layout_width="match_parent"
                     android:layout_height="60dp"
                     android:layout_marginTop="10dp"
                     android:background="@drawable/btn_background_1"
-
                     android:drawablePadding="20dp"
                     android:paddingStart="20dp"
                     android:text="Account and Profile Settings"
@@ -107,7 +119,40 @@
                     android:textStyle="bold"
                     android:textAlignment="viewStart"/>
 
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/profileSettingsButton"
+                    android:layout_width="350dp"
+                    android:layout_height="60dp"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/btn_background_grey"
+                    android:drawablePadding="20dp"
+                    android:paddingStart="20dp"
+                    android:text="Profile Settings"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:textAlignment="viewStart"
+                    android:layout_gravity="center"
+                    tools:ignore="RtlCompat"
+                    android:visibility="gone"
+                    android:textColor="@color/black"
+                    />
 
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/changePasswordButton"
+                    android:layout_width="350dp"
+                    android:layout_height="60dp"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/btn_background_grey"
+                    android:drawablePadding="20dp"
+                    android:paddingStart="20dp"
+                    android:text="Change Password"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:textAlignment="viewStart"
+                    android:layout_gravity="center"
+                    tools:ignore="RtlCompat"
+                    android:textColor="@color/black"
+                    android:visibility="gone"/>
 
 
                 <!-- Nút Back -->

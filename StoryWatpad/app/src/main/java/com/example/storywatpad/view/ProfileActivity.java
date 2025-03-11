@@ -15,11 +15,13 @@ import androidx.appcompat.widget.AppCompatButton;
 import com.example.storywatpad.R;
 
 public class ProfileActivity extends AppCompatActivity {
+
+    private boolean isAccountSettingsVisible = false;
     User user;
     SharedPreferences SP;
     ImageView avatar;
-    TextView NameText, EmailText;
-    AppCompatButton backToHome, logOut;
+    TextView NameText, EmailText, Bio;
+    AppCompatButton backToHome, logOut, anps, storyByMe, profileSettingsButton, changePasswordButton;
 
     private DatabaseHandler db = new DatabaseHandler(this);
     @Override
@@ -45,6 +47,7 @@ public class ProfileActivity extends AppCompatActivity {
 
         NameText.setText(user.getUsername());
         EmailText.setText(user.getEmail());
+        Bio.setText(user.getBio());
         backToHome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -52,6 +55,22 @@ public class ProfileActivity extends AppCompatActivity {
             startActivity(it);
             }
         });
+
+        anps.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                isAccountSettingsVisible = !isAccountSettingsVisible;
+                if(isAccountSettingsVisible){
+                    profileSettingsButton.setVisibility(View.VISIBLE);
+                    changePasswordButton.setVisibility(View.VISIBLE);}
+                else {
+                    profileSettingsButton.setVisibility(View.GONE);
+                    changePasswordButton.setVisibility(View.GONE);}
+
+            }
+            });
+
+
 
         logOut.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -73,5 +92,10 @@ public class ProfileActivity extends AppCompatActivity {
         EmailText = findViewById(R.id.EmailText);
         backToHome = findViewById(R.id.buttonBackToHome);
         logOut = findViewById(R.id.logOut);
+        Bio = findViewById(R.id.Bio);
+        anps = findViewById(R.id.anps);
+        storyByMe = findViewById(R.id.storyByMe);
+        profileSettingsButton = findViewById(R.id.profileSettingsButton);
+        changePasswordButton = findViewById(R.id.changePasswordButton);
     }
 }

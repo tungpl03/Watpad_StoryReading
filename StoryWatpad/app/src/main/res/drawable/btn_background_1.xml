@@ -4,6 +4,9 @@
     <shape android:shape="rectangle">
         <solid android:color="#ffffff"/>
         <corners android:radius="10dp"/>
+        <stroke
+            android:width="2dp"
+            android:color="#6F6B6B" /> <!-- Viền đen, độ rộng 2dp -->
     </shape>
 </item>
 </selector>
