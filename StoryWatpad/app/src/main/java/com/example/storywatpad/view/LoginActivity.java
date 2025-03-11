@@ -26,43 +26,51 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login);
+        db.DB2SDCard();
         Init();
 
-        SP = getSharedPreferences("prmprefs", MODE_PRIVATE);//?
+        SP = getSharedPreferences("wadpadlogin", MODE_PRIVATE);
 
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String email=edtEmail.getText().toString();
-                String pass=edtPassword.getText().toString();
+                String email = edtEmail.getText().toString().trim();
+                String pass = edtPassword.getText().toString().trim();
 
-                if(getAccount(email, pass).getRole().equals("user")){
-                    SharedPreferences.Editor editor = SP.edit();
-                    editor.putString("Email", email);
-                    editor.putString("Password", pass);
-                    editor.apply();//? r lại ok
-                    Intent it = new Intent(LoginActivity.this, MainActivity.class);
-                    startActivity(it);
-                    Toast.makeText(LoginActivity.this,
-                            "Login successful! Hello" + getAccount(email, pass).getUsername(),
-                            Toast.LENGTH_LONG).show();
-                }
-                else if(getAccount(email, pass).getRole().equals("admin")){
-                }
-                else{
+                User user = getAccount(email, pass); // Chỉ gọi 1 lần
+
+                if (user == null) {
                     Toast.makeText(LoginActivity.this,
                             "Check email and password again!",
                             Toast.LENGTH_LONG).show();
-                }
+                } else {
+                    SharedPreferences.Editor editor = SP.edit();
+                    editor.putString("Email", email);
+                    editor.putString("Password", pass);
+                    editor.apply();
 
+                    if ("user".equals(user.getRole())) {
+                        Intent it = new Intent(LoginActivity.this, MainActivity.class);
+                        startActivity(it);
+                        Toast.makeText(LoginActivity.this,
+                                "Login successful! Hello " + user.getUsername(),
+                                Toast.LENGTH_LONG).show();
+                    } else if ("admin".equals(user.getRole())) {
+                        // Xử lý logic cho admin
+                    }
+                }
             }
         });
-
     }
 
     private User getAccount(String email, String pass) {
-        User user = new User();
-        Cursor cursor = db.getCursor("SELECT * FROM User WHERE Email = '"+email+"' AND PasswordHash = '"+pass+"'");
+        Cursor cursor = db.getReadableDatabase().rawQuery(
+                "SELECT * FROM User WHERE Email = ? AND PasswordHash = ?",
+                new String[]{email, pass}
+        );
+
+        User user = null;
+
         if (cursor.moveToFirst()) {
             user = new User(cursor.getInt(0),
                     cursor.getString(1),
@@ -74,6 +82,8 @@ public class LoginActivity extends AppCompatActivity {
                     cursor.getString(7),
                     cursor.getString(8));
         }
+
+        cursor.close(); // Đóng Cursor sau khi sử dụng
         return user;
     }
 
@@ -82,7 +92,4 @@ public class LoginActivity extends AppCompatActivity {
         edtEmail = findViewById(R.id.email);
         edtPassword = findViewById(R.id.edtPass);
     }
-
-
-
 }
