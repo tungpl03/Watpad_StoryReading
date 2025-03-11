@@ -43,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
 
         setContentView(R.layout.homepage);
 
-        db.DB2SDCard();
+
         SP = getSharedPreferences("wadpadlogin", MODE_PRIVATE);//KB in a fun, not out
         user = getAccount(SP.getString("Email", ""), SP.getString("Password", ""));
         hotStories = getHotStories();

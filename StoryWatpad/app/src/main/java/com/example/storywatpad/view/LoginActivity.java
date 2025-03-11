@@ -26,6 +26,7 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login);
+        db.DB2SDCard();
         Init();
 
         SP = getSharedPreferences("wadpadlogin", MODE_PRIVATE);

@@ -7,10 +7,17 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.example.storywatpad.model.Chapter;
+import com.example.storywatpad.model.Story;
+import com.example.storywatpad.model.StoryTag;
+import com.example.storywatpad.model.User;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 public class DatabaseHandler extends SQLiteOpenHelper {
     Context dbContext;
@@ -84,5 +91,151 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         cursor.close();
         return viewCount;
     }
+    public int getLikeCountByStoryId(int storyId) {
+        int likeCount = 0;
+        SQLiteDatabase db = SQLiteDatabase.openDatabase(dbPath, null, SQLiteDatabase.OPEN_READWRITE);
+
+        String query = "SELECT COUNT(*) FROM ReadingHistory WHERE StoryId = ? AND [Like] = 1";
+        Cursor cursor = db.rawQuery(query, new String[]{String.valueOf(storyId)});
+
+        if (cursor.moveToFirst()) {
+            likeCount = cursor.getInt(0); // Lấy giá trị COUNT(*)
+        }
+
+        cursor.close();
+        db.close();
+        return likeCount;
+    }
+
+    public List<StoryTag> getTagsByStoryId(int storyId) {
+        List<StoryTag> tagList = new ArrayList<>();
+        SQLiteDatabase db = SQLiteDatabase.openDatabase(dbPath, null, SQLiteDatabase.OPEN_READWRITE);
+
+        String query = "SELECT t.storyTagId, t.name FROM StoryTag t " +
+                "INNER JOIN StoryTagMapping stm ON t.storyTagId = stm.storyTagId " +
+                "WHERE stm.storyId = ?";
+
+        Cursor cursor = db.rawQuery(query, new String[]{String.valueOf(storyId)});
+
+        if (cursor.moveToFirst()) {
+            do {
+                int id = cursor.getInt(0);
+                String name = cursor.getString(1);
+                tagList.add(new StoryTag(id, name));
+            } while (cursor.moveToNext());
+        }
+
+        cursor.close();
+        db.close();
+
+        return tagList;
+    }
+    public Story getStoryById(int storyId) {
+        Story story = null;
+        SQLiteDatabase db = SQLiteDatabase.openDatabase(dbPath, null, SQLiteDatabase.OPEN_READWRITE);
+
+        String query = "SELECT * FROM Story WHERE StoryId  = ?";
+        Cursor cursor = db.rawQuery(query, new String[]{String.valueOf(storyId)});
+
+        if (cursor.moveToFirst()) {
+            story = new Story(
+                    cursor.getInt(0),  // story_id
+                    cursor.getInt(1),  // author_id
+                    cursor.getString(2), // title
+                    cursor.getString(3), // description
+                    cursor.getString(4), // CoverImageUrl
+                    cursor.getInt(5), // genre_id
+                    cursor.getString(6), // status
+                    cursor.getString(7), // created_at
+                    cursor.getString(8)  // updated_at
+            );
+        }
+
+        cursor.close();
+        db.close();
+        return story;
+    }
+
+    public List<Chapter> getChaptersByStoryId(int storyId) {
+        List<Chapter> chapterList = new ArrayList<>();
+        SQLiteDatabase db = SQLiteDatabase.openDatabase(dbPath, null, SQLiteDatabase.OPEN_READWRITE);
+
+        String query = "SELECT * FROM Chapter WHERE StoryId  = ? ORDER BY CreatedAt ASC";
+        Cursor cursor = db.rawQuery(query, new String[]{String.valueOf(storyId)});
+
+        if (cursor.moveToFirst()) {
+            do {
+                Chapter chapter = new Chapter(
+                        cursor.getInt(0),  // chapterId
+                        cursor.getInt(1),  // storyId
+                        cursor.getString(2), // title
+                        cursor.getString(3), // content
+                        cursor.getString(4), // createdAt
+                        cursor.getString(5)  // updatedAt
+                );
+                chapterList.add(chapter);
+            } while (cursor.moveToNext());
+        }
+
+        cursor.close();
+        db.close();
+        return chapterList;
+    }
+    public User getUserByStoryId(int storyId) {
+        User user = null;
+        SQLiteDatabase db = SQLiteDatabase.openDatabase(dbPath, null, SQLiteDatabase.OPEN_READWRITE);
+
+        // Truy vấn để lấy AuthorId từ bảng Story, sau đó lấy thông tin từ bảng User
+        String query = "SELECT u.* FROM User u " +
+                "JOIN Story s ON u.UserId = s.AuthorId " +
+                "WHERE s.StoryId = ?";
+
+        Cursor cursor = db.rawQuery(query, new String[]{String.valueOf(storyId)});
+
+        if (cursor.moveToFirst()) {
+            user = new User(
+                    cursor.getInt(0),  // UserId
+                    cursor.getString(1), // Username
+                    cursor.getString(2), // Email
+                    cursor.getString(3), // PasswordHash
+                    cursor.getString(4), // AvatarUrl
+                    cursor.getString(5), // Bio
+                    cursor.getString(6), // Role
+                    cursor.getString(7),  // CreatedAt
+                    cursor.getString(8)
+            );
+        }
+
+        cursor.close();
+        db.close();
+        return user;
+    }
+
+    public User getUserById(int userId) {
+        User user = null;
+        SQLiteDatabase db = SQLiteDatabase.openDatabase(dbPath, null, SQLiteDatabase.OPEN_READWRITE);
+
+        String query = "SELECT * FROM User WHERE UserId = ?";  // Truy vấn User theo UserId
+        Cursor cursor = db.rawQuery(query, new String[]{String.valueOf(userId)});
+
+        if (cursor.moveToFirst()) {
+            user = new User(
+                    cursor.getInt(0),  // UserId
+                    cursor.getString(1), // Username
+                    cursor.getString(2), // Email
+                    cursor.getString(3), // PasswordHash
+                    cursor.getString(4), // AvatarUrl
+                    cursor.getString(5), // Bio
+                    cursor.getString(6), // Role
+                    cursor.getString(7), // CreatedAt
+                    cursor.getString(8)
+            );
+        }
+
+        cursor.close();
+        db.close();
+        return user;
+    }
+
 
 }

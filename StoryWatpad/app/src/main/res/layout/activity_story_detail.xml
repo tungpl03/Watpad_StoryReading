@@ -1,0 +1,363 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    tools:context=".view.StoryDetailActivity">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <ImageView
+                    android:id="@+id/btnBack"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_marginStart="18dp"
+                    android:layout_marginTop="24dp"
+                    android:padding="8dp"
+                    android:background="?attr/selectableItemBackground"
+                    android:scaleType="fitCenter"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:src="@drawable/arrow" /> <!-- Đảm bảo hình ảnh tồn tại -->
+
+
+                <View
+                    android:id="@+id/view"
+                    android:layout_width="0dp"
+                    android:layout_height="290dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginBottom="8dp"
+                    android:background="@color/light_grey"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/btnBack"
+                    app:layout_constraintVertical_bias="0.0" />
+
+                <ImageView
+                    android:id="@+id/storyView"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_margin="16dp"
+                    app:layout_constraintBottom_toBottomOf="@+id/view"
+                    app:layout_constraintEnd_toEndOf="@+id/view"
+                    app:layout_constraintStart_toStartOf="@+id/view"
+                    app:layout_constraintTop_toTopOf="@+id/view"
+                    tools:srcCompat="@tools:sample/avatars" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+            <!-- Thêm đường gạch ngang -->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@android:color/darker_gray"
+                android:layout_marginTop="8dp"
+                android:layout_marginHorizontal="16dp" />
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                >
+
+                <TextView
+                    android:id="@+id/txtTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="23sp"
+                    android:textStyle="bold"
+                    android:layout_weight="1"
+                    android:textColor="@color/black"
+                    android:layout_marginStart="16dp"
+                    android:text="TextView" />
+            </LinearLayout>
+            <!-- Thêm đường gạch ngang -->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@android:color/darker_gray"
+                android:layout_marginTop="8dp"
+                android:layout_marginHorizontal="16dp" />
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center"> <!-- Căn giữa các phần tử bên trong -->
+
+                <xyz.schwaab.avvylib.AvatarView
+                    android:id="@+id/avatarView"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:src="@drawable/anhavartar"
+                    app:avvy_border_color="@color/grey"
+                    app:avvy_border_highlight_color="#ff5900"
+                    app:avvy_border_highlight_color_end="#bf15bc"
+                    app:avvy_border_thickness="2dp"
+                    app:avvy_border_thickness_highlight="3dp"
+                    app:avvy_distance_to_border="5dp"
+                    app:avvy_highlighted="true"
+                    app:avvy_loading_arches="5"
+                    app:avvy_loading_arches_degree_area="90" />
+
+                <TextView
+                    android:id="@+id/txtUserName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="TextView"
+                    android:layout_marginStart="8dp"/> <!-- Khoảng cách giữa AvatarView và TextView -->
+            </LinearLayout>
+            <!-- Thêm đường gạch ngang -->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@android:color/darker_gray"
+                android:layout_marginTop="8dp"
+                android:layout_marginHorizontal="16dp" />
+
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp">
+
+                <!-- Icon + View Count -->
+                <TextView
+                    android:id="@+id/tvViews"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="50dp"
+                    android:drawableStart="@drawable/eye_svgrepo_com"
+                    android:drawablePadding="4dp"
+                    android:text="52.4K"
+                    android:textColor="@color/black"
+                    android:textSize="12sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent" />
+
+                <TextView
+                    android:id="@+id/textView11"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:text="View"
+                    android:textColor="@color/black"
+                    android:textSize="12sp"
+                    app:layout_constraintBaseline_toBaselineOf="@id/tvViews"
+                    app:layout_constraintEnd_toStartOf="@+id/tvLikes"
+                    app:layout_constraintStart_toEndOf="@id/tvViews" />
+
+                <!-- Icon + Like Count -->
+                <TextView
+                    android:id="@+id/tvLikes"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="907"
+                    android:textSize="12sp"
+                    android:textColor="@color/black"
+                    android:drawableStart="@drawable/heart_svgrepo_com"
+                    android:drawablePadding="4dp"
+                    app:layout_constraintStart_toEndOf="@id/textView11"
+                    app:layout_constraintBaseline_toBaselineOf="@id/textView12"/>
+
+                <TextView
+                    android:id="@+id/textView12"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Like"
+                    android:textSize="12sp"
+                    android:textColor="@color/black"
+                    app:layout_constraintStart_toEndOf="@id/tvLikes"
+                    app:layout_constraintBaseline_toBaselineOf="@id/tvLikes"/>
+
+                <!-- Icon + Chapter Count -->
+                <TextView
+                    android:id="@+id/tvParts"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="12"
+                    android:textSize="12sp"
+                    android:textColor="@color/black"
+                    android:drawableStart="@drawable/document_901"
+                    android:drawablePadding="4dp"
+                    app:layout_constraintStart_toEndOf="@id/textView12"
+                    app:layout_constraintBaseline_toBaselineOf="@id/textView13"/>
+
+                <TextView
+                    android:id="@+id/textView13"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Part"
+                    android:textSize="12sp"
+                    android:textColor="@color/black"
+                    app:layout_constraintStart_toEndOf="@id/tvParts"
+                    app:layout_constraintBaseline_toBaselineOf="@id/tvParts"/>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <!-- Layout chứa hai nút Read và Library -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:layout_marginTop="12dp"
+                android:padding="16dp">
+
+                <!-- Nút Read -->
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/btnRead"
+                    android:layout_width="0dp"
+                    android:layout_height="48dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/button_black"
+                    android:text="Read"
+                    android:gravity="center"
+                    android:textAlignment="center"
+                    android:textSize="16sp"
+                    android:textColor="@android:color/white"
+                    android:drawablePadding="8dp" />
+
+                <!-- Khoảng cách giữa 2 nút -->
+                <Space
+                    android:layout_width="16dp"
+                    android:layout_height="wrap_content"/>
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/btnLibrary"
+                    android:layout_width="0dp"
+                    android:layout_height="48dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/button_white_border"
+                    android:text="Library"
+                    android:textSize="16sp"
+                    android:textColor="@color/black"
+                    android:drawableStart="@drawable/ic_library"
+                    android:drawablePadding="8dp" />
+            </LinearLayout>
+
+            <!-- Thêm đường gạch ngang -->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@android:color/darker_gray"
+                android:layout_marginTop="8dp"
+                android:layout_marginHorizontal="16dp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+
+                android:orientation="horizontal">
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/tag_recycler_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:orientation="horizontal"
+                    android:overScrollMode="never"
+                    android:scrollbars="none"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    tools:listitem="@layout/item_tag" />
+            </LinearLayout>
+            <!-- Thêm đường gạch ngang -->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@android:color/darker_gray"
+                android:layout_marginTop="8dp"
+                android:layout_marginHorizontal="16dp" />
+
+            <!-- Phần hiển thị mô tả truyện -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:background="@color/white"
+                android:padding="16dp">
+
+                <TextView
+                    android:id="@+id/tvStoryCategory"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="✧･ﾟ: *✧ (Harry Potter x Fem! Reader)"
+                    android:textSize="14sp"
+                    android:textColor="@color/black"
+                    android:layout_marginBottom="8dp"/>
+
+                <TextView
+                    android:id="@+id/tvStoryDescription"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="❝ After all those years, lord knows how and why, the boy knew he’d been designed to love her since"
+                    android:textSize="16sp"
+                    android:textColor="@color/black"
+                    android:textStyle="italic"
+                    android:fontFamily="sans-serif-medium"
+                    android:lineSpacingExtra="4dp"/>
+            </LinearLayout>
+            <!-- Thêm đường gạch ngang -->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@android:color/darker_gray"
+                android:layout_marginTop="8dp"
+                android:layout_marginHorizontal="16dp" />
+
+            <!-- Phần danh sách chương -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:background="@color/white"
+                android:padding="16dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="start"
+                    android:layout_marginBottom="8dp">
+
+
+
+                    <TextView
+                        android:id="@+id/tvTotalChapters"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="75 parts"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/black" />
+                </LinearLayout>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rvChapters"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:nestedScrollingEnabled="false"
+                    tools:listitem="@layout/item_chapter" />
+            </LinearLayout>
+
+        </LinearLayout>
+    </ScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
