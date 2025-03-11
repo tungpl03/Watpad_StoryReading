@@ -100,6 +100,10 @@ public class User {
         UpdatedAt = updatedAt;
     }
     public String getDrawableImageName() {
+        if(AvatarUrl != null){
         return AvatarUrl.replace(".jpg", "").replace(".png", "").replace(".jpeg", "");
+    }
+        else{
+        return "";}
     }
 }

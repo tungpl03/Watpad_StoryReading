@@ -98,7 +98,12 @@ public class Story {
         this.updated_at = updated_at;
     }
     public String getDrawableImageName() {
-        return CoverImageUrl.replace(".jpg", "").replace(".png", "").replace(".jpeg", "");
+        if(CoverImageUrl != null) {
+            return CoverImageUrl.replace(".jpg", "").replace(".png", "").replace(".jpeg", "");
+        }
+    else{
+        return "";
+        }
     }
 
 }

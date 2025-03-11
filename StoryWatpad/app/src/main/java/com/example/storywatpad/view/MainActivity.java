@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.TextView;
 import xyz.schwaab.avvylib.AvatarView;
 
@@ -43,9 +44,13 @@ public class MainActivity extends AppCompatActivity {
 
         setContentView(R.layout.homepage);
 
+<<<<<<< HEAD
 
+=======
+ //       db.DB2SDCard();
+>>>>>>> main
         SP = getSharedPreferences("wadpadlogin", MODE_PRIVATE);//KB in a fun, not out
-        user = getAccount(SP.getString("Email", ""), SP.getString("Password", ""));
+        user = db.getAccount(SP.getString("Email", ""), SP.getString("Password", ""));
         hotStories = getHotStories();
         arrStory = getAllStories();
         rvStory = (RecyclerView) findViewById(R.id.rvAllBook);
@@ -61,6 +66,13 @@ public class MainActivity extends AppCompatActivity {
         } else {
             avatarView.setImageResource(R.drawable.logocomic);
         }
+
+        avatarView.setOnClickListener(new View.OnClickListener(){
+            public void onClick(View v) {
+                Intent it = new Intent(MainActivity.this, ProfileActivity.class);
+                startActivity(it);
+            }
+        });
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigationView);
 
@@ -132,28 +144,28 @@ public class MainActivity extends AppCompatActivity {
         return allStories;
     }
 
-    private User getAccount(String email, String pass) {
-        Cursor cursor = db.getReadableDatabase().rawQuery(
-                "SELECT * FROM User WHERE Email = ? AND PasswordHash = ?",
-                new String[]{email, pass}
-        );
-
-        User user = null;
-
-        if (cursor.moveToFirst()) {
-            user = new User(cursor.getInt(0),
-                    cursor.getString(1),
-                    cursor.getString(2),
-                    cursor.getString(3),
-                    cursor.getString(4),
-                    cursor.getString(5),
-                    cursor.getString(6),
-                    cursor.getString(7),
-                    cursor.getString(8));
-        }
-
-        cursor.close(); // Đóng Cursor sau khi sử dụng
-        return user;
-    }
+//    private User getAccount(String email, String pass) {
+//        Cursor cursor = db.getReadableDatabase().rawQuery(
+//                "SELECT * FROM User WHERE Email = ? AND PasswordHash = ?",
+//                new String[]{email, pass}
+//        );
+//
+//        User user = null;
+//
+//        if (cursor.moveToFirst()) {
+//            user = new User(cursor.getInt(0),
+//                    cursor.getString(1),
+//                    cursor.getString(2),
+//                    cursor.getString(3),
+//                    cursor.getString(4),
+//                    cursor.getString(5),
+//                    cursor.getString(6),
+//                    cursor.getString(7),
+//                    cursor.getString(8));
+//        }
+//
+//        cursor.close(); // Đóng Cursor sau khi sử dụng
+//        return user;
+//    }
     
 }
