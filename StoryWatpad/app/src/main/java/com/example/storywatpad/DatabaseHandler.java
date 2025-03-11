@@ -7,12 +7,10 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 import android.widget.Toast;
 
-<<<<<<< HEAD
+
 import com.example.storywatpad.model.Chapter;
 import com.example.storywatpad.model.Story;
 import com.example.storywatpad.model.StoryTag;
-=======
->>>>>>> main
 import com.example.storywatpad.model.User;
 
 import java.io.File;

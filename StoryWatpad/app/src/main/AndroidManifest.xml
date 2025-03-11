@@ -1,12 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
-<<<<<<< HEAD
-=======
 
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
->>>>>>> main
 
     <application
         android:allowBackup="true"
@@ -18,12 +15,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.StoryWatpad"
         tools:targetApi="31">
+
         <activity
-<<<<<<< HEAD
             android:name=".view.StoryDetailActivity"
-=======
+            android:exported="false" />
+        <activity
             android:name=".view.RegisterActivity"
->>>>>>> main
             android:exported="false" />
         <activity
             android:name=".view.SearchActivity"
@@ -31,21 +28,17 @@
         <activity
             android:name=".view.MainActivity"
             android:exported="false" />
-<<<<<<< HEAD
-=======
         <activity
             android:name=".view.ProfileActivity"
             android:exported="false" />
         <activity
             android:name=".view.ForgetPasswordActivity"
             android:exported="false" />
->>>>>>> main
         <activity
             android:name=".view.LoginActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
