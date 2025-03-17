@@ -16,8 +16,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.storywatpad.DatabaseHandler;
 import com.example.storywatpad.R;
 import com.example.storywatpad.model.User;
-import com.example.storywatpad.support.GenPassword;
-import com.example.storywatpad.support.JavaMailAPI;
+import com.example.storywatpad.support.*;
 
 public class ForgetPasswordActivity extends AppCompatActivity {
 

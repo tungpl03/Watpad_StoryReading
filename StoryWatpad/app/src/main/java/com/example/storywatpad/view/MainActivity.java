@@ -3,10 +3,11 @@ package com.example.storywatpad.view;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
-import xyz.schwaab.avvylib.AvatarView;
 
 import com.example.storywatpad.model.User;
 import androidx.activity.EdgeToEdge;
@@ -21,7 +22,9 @@ import com.example.storywatpad.model.ReadingHistory;
 import com.example.storywatpad.model.Story;
 import com.example.storywatpad.view.adapter.StoryAdapter;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.imageview.ShapeableImageView;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
     SharedPreferences SP;
     User user;
     TextView Name;
-    AvatarView avatarView;
+    ShapeableImageView avatarView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -52,12 +55,11 @@ public class MainActivity extends AppCompatActivity {
         rvHotStory = (RecyclerView) findViewById(R.id.rvHotStory);
         Name = findViewById(R.id.Name);
         Name.setText(user.getUsername());
-        avatarView = findViewById(R.id.avatarView);
-        String userAvatar = user.getDrawableImageName();
-        int imageResId = this.getResources().getIdentifier(userAvatar, "drawable", this.getPackageName());
+        avatarView = findViewById(R.id.avatarViewhome);
+        String userAvatar = user.getAvatarUrl();
 
-        if (imageResId != 0) {
-            avatarView.setImageResource(imageResId);
+        if (userAvatar != null && !userAvatar.isEmpty()) {
+            avatarView.setImageURI(Uri.fromFile(new File(userAvatar)));
         } else {
             avatarView.setImageResource(R.drawable.logocomic);
         }
