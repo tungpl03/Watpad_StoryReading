@@ -291,4 +291,10 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         db.close();
     }
 
+    public void upDateProfile(String email, String AvatarUrl, String bio, String username) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.execSQL("UPDATE User SET AvatarUrl = ?, Bio = ?, Username = ? WHERE Email = ?", new String[]{AvatarUrl,bio,username, email});
+        db.close();
+    }
+
 }

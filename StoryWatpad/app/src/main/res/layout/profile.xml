@@ -19,7 +19,7 @@
             <!-- Bố cục chứa hình ảnh nền và profile -->
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="334dp">
+                android:layout_height="wrap_content">
 
                 <!-- Hình nền top -->
                 <ImageView
@@ -54,6 +54,7 @@
                     android:text="Lion Fischer"
                     android:textSize="25sp"
                     android:textStyle="bold"
+                    android:textColor="@color/black"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/avatar" />
@@ -71,6 +72,18 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/NameText" />
 
+                <TextView
+                    android:id="@+id/Bio"
+                    android:layout_marginTop="10dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="hi im tung"
+                    android:textSize="18sp"
+                    android:textColor="#646262"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/EmailText" />
+
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <!-- Các nút chức năng -->
@@ -82,7 +95,7 @@
                 android:layout_marginTop="16dp">
 
                 <androidx.appcompat.widget.AppCompatButton
-                    android:id="@+id/button"
+                    android:id="@+id/storyByMe"
                     android:layout_width="match_parent"
                     android:layout_height="60dp"
                     android:background="@drawable/btn_background_1"
@@ -94,7 +107,7 @@
                     android:textAlignment="viewStart"/>
 
                 <androidx.appcompat.widget.AppCompatButton
-                    android:id="@+id/button2"
+                    android:id="@+id/aaps"
                     android:layout_width="match_parent"
                     android:layout_height="60dp"
                     android:layout_marginTop="10dp"
@@ -107,7 +120,37 @@
                     android:textStyle="bold"
                     android:textAlignment="viewStart"/>
 
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/profileSettingsButton"
+                    android:layout_width="350dp"
+                    android:layout_height="60dp"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/btn_background_4"
+                    android:drawablePadding="20dp"
+                    android:paddingStart="20dp"
+                    android:text="Profile Settings"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:textAlignment="viewStart"
+                    android:visibility="gone"
+                    tools:ignore="RtlCompat" />
 
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/changePasswordButton"
+                    android:layout_width="350dp"
+                    android:layout_height="60dp"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/btn_background_4"
+                    android:drawablePadding="20dp"
+                    android:paddingStart="20dp"
+                    android:text="Change Password"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:textAlignment="viewStart"
+                    android:visibility="gone"
+                    tools:ignore="RtlCompat" />
 
 
                 <!-- Nút Back -->

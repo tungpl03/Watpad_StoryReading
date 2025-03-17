@@ -18,12 +18,12 @@ import androidx.core.view.WindowInsetsCompat;
 import com.example.storywatpad.DatabaseHandler;
 import com.example.storywatpad.R;
 import com.example.storywatpad.model.User;
-import com.example.storywatpad.validate.Validate;
+import com.example.storywatpad.validate.*;
 
 public class RegisterActivity extends AppCompatActivity {
     EditText edtUsername, edtEmail, edtPassword, edtRePassword;
     Button btnNext;
-    Validate validate = new Validate();
+     Validate validate = new Validate();
     DatabaseHandler db = new DatabaseHandler(this);
     SharedPreferences SP;
 
