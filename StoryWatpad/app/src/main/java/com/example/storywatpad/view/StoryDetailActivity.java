@@ -2,6 +2,7 @@ package com.example.storywatpad.view;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -38,7 +39,7 @@ public class StoryDetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_story_detail);
         // Khai báo nút btnBack
-        ImageView btnBack = findViewById(R.id.btnBack);
+        ImageButton btnBack = findViewById(R.id.btnBack);
 
 // Xử lý sự kiện khi bấm nút Back
         btnBack.setOnClickListener(view -> {
