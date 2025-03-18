@@ -22,7 +22,7 @@ import com.example.storywatpad.support.JavaMailAPI;
 public class ForgetPasswordActivity extends AppCompatActivity {
 
     EditText email;
-    Button btnSent;
+    Button btnSent, btnCancel;
     DatabaseHandler db = new DatabaseHandler(this);
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +35,13 @@ public class ForgetPasswordActivity extends AppCompatActivity {
     }
 
     private void Events() {
+        btnCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent it = new Intent(ForgetPasswordActivity.this, LoginActivity.class);
+                startActivity(it);
+            }
+        });
         btnSent.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -84,6 +91,7 @@ public class ForgetPasswordActivity extends AppCompatActivity {
     private void Init() {
         email = findViewById(R.id.email);
         btnSent = findViewById(R.id.btnSent);
+        btnCancel = findViewById(R.id.btnCancel);
     }
 
 }
