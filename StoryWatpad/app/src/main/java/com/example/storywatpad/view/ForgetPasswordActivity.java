@@ -12,12 +12,12 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.AppCompatButton;
 
 import com.example.storywatpad.DatabaseHandler;
 import com.example.storywatpad.R;
 import com.example.storywatpad.model.User;
-import com.example.storywatpad.support.GenPassword;
-import com.example.storywatpad.support.JavaMailAPI;
+import com.example.storywatpad.support.*;
 
 public class ForgetPasswordActivity extends AppCompatActivity {
 
@@ -31,7 +31,10 @@ public class ForgetPasswordActivity extends AppCompatActivity {
         Init();
         Events();
 
-
+        AppCompatButton btnCancel = findViewById(R.id.btnCancel);
+        btnCancel.setOnClickListener(view -> {
+            finish(); // Đóng Activity hiện tại để quay lại MainActivity
+        });
     }
 
     private void Events() {

@@ -26,6 +26,8 @@ public class User {
         UpdatedAt = updatedAt;
     }
 
+
+
     public int getUserId() {
         return UserId;
     }

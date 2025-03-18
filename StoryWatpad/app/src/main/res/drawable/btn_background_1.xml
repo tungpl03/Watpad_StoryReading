@@ -6,7 +6,7 @@
         <corners android:radius="10dp"/>
         <stroke
             android:width="2dp"
-            android:color="#6F6B6B" /> <!-- Viền đen, độ rộng 2dp -->
+            android:color="#8E8C8C" />
     </shape>
 </item>
 </selector>

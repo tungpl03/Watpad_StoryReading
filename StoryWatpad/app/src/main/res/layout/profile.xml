@@ -54,6 +54,7 @@
                     android:text="Lion Fischer"
                     android:textSize="25sp"
                     android:textStyle="bold"
+                    android:textColor="@color/black"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/avatar" />
@@ -65,23 +66,22 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
                     android:text="lionfischer@gmail.com"
-                    android:textColor="@color/black"
+                    android:textColor="#666666"
                     android:textSize="18sp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/NameText" />
 
-                <!--bio -->
                 <TextView
                     android:id="@+id/Bio"
+                    android:layout_marginTop="10dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:text="nothing in bio"
-                    android:textColor="#373535"
+                    android:text="hi im tung"
                     android:textSize="18sp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
+                    android:textColor="#646262"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/EmailText" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
@@ -107,11 +107,12 @@
                     android:textAlignment="viewStart"/>
 
                 <androidx.appcompat.widget.AppCompatButton
-                    android:id="@+id/anps"
+                    android:id="@+id/aaps"
                     android:layout_width="match_parent"
                     android:layout_height="60dp"
                     android:layout_marginTop="10dp"
                     android:background="@drawable/btn_background_1"
+
                     android:drawablePadding="20dp"
                     android:paddingStart="20dp"
                     android:text="Account and Profile Settings"
@@ -123,36 +124,33 @@
                     android:id="@+id/profileSettingsButton"
                     android:layout_width="350dp"
                     android:layout_height="60dp"
+                    android:layout_gravity="center"
                     android:layout_marginTop="10dp"
-                    android:background="@drawable/btn_background_grey"
+                    android:background="@drawable/btn_background_4"
                     android:drawablePadding="20dp"
                     android:paddingStart="20dp"
                     android:text="Profile Settings"
                     android:textSize="18sp"
                     android:textStyle="bold"
                     android:textAlignment="viewStart"
-                    android:layout_gravity="center"
-                    tools:ignore="RtlCompat"
                     android:visibility="gone"
-                    android:textColor="@color/black"
-                    />
+                    tools:ignore="RtlCompat" />
 
                 <androidx.appcompat.widget.AppCompatButton
                     android:id="@+id/changePasswordButton"
                     android:layout_width="350dp"
                     android:layout_height="60dp"
+                    android:layout_gravity="center"
                     android:layout_marginTop="10dp"
-                    android:background="@drawable/btn_background_grey"
+                    android:background="@drawable/btn_background_4"
                     android:drawablePadding="20dp"
                     android:paddingStart="20dp"
                     android:text="Change Password"
                     android:textSize="18sp"
                     android:textStyle="bold"
                     android:textAlignment="viewStart"
-                    android:layout_gravity="center"
-                    tools:ignore="RtlCompat"
-                    android:textColor="@color/black"
-                    android:visibility="gone"/>
+                    android:visibility="gone"
+                    tools:ignore="RtlCompat" />
 
 
                 <!-- Nút Back -->
