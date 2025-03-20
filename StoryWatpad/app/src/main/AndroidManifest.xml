@@ -43,8 +43,15 @@
         <activity
             android:name=".view.ChangePasswordActivity"
             android:exported="false" />
+
         <activity android:name=".view.ChangeProfileActivity"
             android:exported="false" />
+
+        <activity android:name=".view.AdminPageActivity"
+            android:exported="false"/>
+        <activity android:name=".view.AccountManageActivity"
+            android:exported="false"/>
+
         <activity
             android:name=".view.LoginActivity"
             android:exported="true">

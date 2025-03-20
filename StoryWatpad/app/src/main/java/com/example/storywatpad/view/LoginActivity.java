@@ -46,13 +46,23 @@ public class LoginActivity extends AppCompatActivity {
                     Toast.makeText(LoginActivity.this,
                             "Check email and password again!",
                             Toast.LENGTH_LONG).show();
-                } else {
+                }
+                else if("banned".equals(user.getStatus())){
+                    Toast.makeText(LoginActivity.this,
+                            "Your account is banned!",
+                            Toast.LENGTH_LONG).show();
+
+                }
+
+
+                else {
                     SharedPreferences.Editor editor = SP.edit();
                     editor.putString("Email", email);
                     editor.putString("Password", pass);
                     editor.apply();
 
                     if ("user".equals(user.getRole())) {
+
                         Intent it = new Intent(LoginActivity.this, MainActivity.class);
                         startActivity(it);
                         Toast.makeText(LoginActivity.this,
@@ -61,9 +71,11 @@ public class LoginActivity extends AppCompatActivity {
                     } else if ("admin".equals(user.getRole())) {
                         // Xử lý logic cho admin
 
-
-
-
+                        Intent it = new Intent(LoginActivity.this, AdminPageActivity.class);
+                        startActivity(it);
+                        Toast.makeText(LoginActivity.this,
+                                "Login successful! Hello " + user.getUsername(),
+                                Toast.LENGTH_LONG).show();
 
                     }
                 }
@@ -106,7 +118,8 @@ public class LoginActivity extends AppCompatActivity {
                     cursor.getString(5),
                     cursor.getString(6),
                     cursor.getString(7),
-                    cursor.getString(8));
+                    cursor.getString(8),
+                    cursor.getString(9));
         }
 
         cursor.close(); // Đóng Cursor sau khi sử dụng

@@ -203,7 +203,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                     cursor.getString(5), // Bio
                     cursor.getString(6), // Role
                     cursor.getString(7),  // CreatedAt
-                    cursor.getString(8)
+                    cursor.getString(8),
+                    cursor.getString(9)
             );
         }
 
@@ -229,7 +230,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                     cursor.getString(5), // Bio
                     cursor.getString(6), // Role
                     cursor.getString(7), // CreatedAt
-                    cursor.getString(8)
+                    cursor.getString(8),
+                    cursor.getString(9)
             );
         }
 
@@ -256,7 +258,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                     cursor.getString(5),
                     cursor.getString(6),
                     cursor.getString(7),
-                    cursor.getString(8));
+                    cursor.getString(8),
+                    cursor.getString(9));
         }
 
         cursor.close(); // Đóng Cursor sau khi sử dụng
@@ -279,7 +282,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                     cursor.getString(5),
                     cursor.getString(6),
                     cursor.getString(7),
-                    cursor.getString(8));
+                    cursor.getString(8),
+                    cursor.getString(9));
         }
 
         cursor.close(); // Đóng Cursor sau khi sử dụng
@@ -297,4 +301,32 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         db.close();
     }
 
+    public List<User> getAllUser() {
+        List<User> userList = new ArrayList<>();
+        SQLiteDatabase db = SQLiteDatabase.openDatabase(dbPath, null, SQLiteDatabase.OPEN_READWRITE);
+
+        Cursor cursor = getCursor("SELECT * FROM User WHERE Role = 'user'");
+
+        if (cursor.moveToFirst()) {
+            do {
+                User user = new User(
+                        cursor.getInt(0),
+                        cursor.getString(1),
+                        cursor.getString(2),
+                        cursor.getString(3),
+                        cursor.getString(4),
+                        cursor.getString(5),
+                        cursor.getString(6),
+                        cursor.getString(7),
+                        cursor.getString(8),
+                        cursor.getString(9)
+                );
+                userList.add(user);
+            } while (cursor.moveToNext());
+        }
+
+        cursor.close();
+        db.close();
+        return userList;
+    }
 }

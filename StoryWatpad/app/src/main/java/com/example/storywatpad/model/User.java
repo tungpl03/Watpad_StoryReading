@@ -10,11 +10,12 @@ public class User {
     String Role;
     String CreatedAt;
     String UpdatedAt;
+    String Status;
 
     public User() {
     }
 
-    public User(int userId, String username, String email, String passwordHash, String avatarUrl, String bio, String role, String createdAt, String updatedAt) {
+    public User(int userId, String username, String email, String passwordHash, String avatarUrl, String bio, String role, String createdAt, String updatedAt, String status) {
         UserId = userId;
         Username = username;
         Email = email;
@@ -24,9 +25,8 @@ public class User {
         Role = role;
         CreatedAt = createdAt;
         UpdatedAt = updatedAt;
+        Status = status;
     }
-
-
 
     public int getUserId() {
         return UserId;
@@ -99,6 +99,15 @@ public class User {
     public void setUpdatedAt(String updatedAt) {
         UpdatedAt = updatedAt;
     }
+
+    public String getStatus() {
+        return Status;
+    }
+
+    public void setStatus(String status) {
+        Status = status;
+    }
+
     public String getDrawableImageName() {
         if(AvatarUrl != null){
         return AvatarUrl.replace(".jpg", "").replace(".png", "").replace(".jpeg", "");

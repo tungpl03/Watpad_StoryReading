@@ -32,7 +32,6 @@ public class MainActivity extends AppCompatActivity {
     RecyclerView rvStory,rvHotStory;
     List<Story> arrStory = new ArrayList<>();
     List<Story> hotStories = new ArrayList<>();
-    List<ReadingHistory> readingHistories = new ArrayList<>();
     StoryAdapter adapter,hotStoryAdapter;
     private DatabaseHandler db = new DatabaseHandler(this);
     SharedPreferences SP;
