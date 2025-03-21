@@ -1,176 +1,235 @@
 package com.example.storywatpad.view;
 
-import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextUtils;
-import android.text.TextWatcher;
-import android.view.KeyEvent;
 import android.view.View;
-import android.view.inputmethod.EditorInfo;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.EditText;
-import android.widget.TextView;
-
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.Spinner;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
+import com.example.storywatpad.DatabaseHandler;
 import com.example.storywatpad.R;
 import com.example.storywatpad.model.Story;
 import com.example.storywatpad.view.adapter.StorySearchViewAdapter;
-import com.example.storywatpad.view.adapter.StoryTitleAdapter;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
+import java.util.concurrent.TimeUnit;
 
 public class SearchActivity extends AppCompatActivity {
-    private RecyclerView rvSearchListTemp, rvSearchSuggestions;
-    private List<Story> storyList = new ArrayList<>();
-    private List<Story> filteredList = new ArrayList<>();
-    private List<Story> titleFilteredList = new ArrayList<>();
-
-    private StorySearchViewAdapter storyAdapter;
-    private StoryTitleAdapter titleAdapter;
     private SearchView searchView;
+    private RecyclerView rvSearchResults;
+    private Button btnSearch;
+    private Spinner spinnerLength, spinnerLastUpdated, spinnerGenre;
+    private View filterContainer;
+    private StorySearchViewAdapter searchAdapter;
+    private DatabaseHandler databaseHandler;
+    private List<Story> searchResults;
+    private List<Integer> genreIdList; // Lưu ID của thể loại
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.search);
+        setContentView(R.layout.activity_search);
 
+        // Khởi tạo DatabaseHandler
+        databaseHandler = new DatabaseHandler(this);
+
+        // Ánh xạ View
         searchView = findViewById(R.id.searchView);
-        rvSearchListTemp = findViewById(R.id.rvSearchListTemp);
-        rvSearchSuggestions = findViewById(R.id.rvSearchSuggestions);
+        rvSearchResults = findViewById(R.id.rvSearchResults);
+        btnSearch = findViewById(R.id.btnSearch);
+        spinnerLength = findViewById(R.id.spinnerLength);
+        spinnerLastUpdated = findViewById(R.id.spinnerLastUpdated);
+        spinnerGenre = findViewById(R.id.spinnerGenre);
+        filterContainer = findViewById(R.id.filterContainer);
 
-        rvSearchListTemp.setLayoutManager(new LinearLayoutManager(this));
-        rvSearchSuggestions.setLayoutManager(new LinearLayoutManager(this));
+        // Ẩn danh sách & bộ lọc khi mới vào màn hình
+        rvSearchResults.setVisibility(View.GONE);
+        filterContainer.setVisibility(View.GONE);
 
-        rvSearchListTemp.setVisibility(View.GONE);
+        // Thiết lập RecyclerView
+        searchResults = new ArrayList<>();
+        searchAdapter = new StorySearchViewAdapter(searchResults, this);
+        rvSearchResults.setLayoutManager(new LinearLayoutManager(this));
+        rvSearchResults.setAdapter(searchAdapter);
 
-//        storyList.add(new Story("1", 1, "Harry Potter", "Fantasy", 100, 200, "https://picsum.photos/200", 3));
-//        storyList.add(new Story("2", 1, "Home Sweet Home", "Horror", 90, 150, "https://picsum.photos/200", 4));
-//        storyList.add(new Story("3", 1, "Hunter X Hunter", "Adventure", 80, 120, "https://picsum.photos/200", 5));
-//        storyList.add(new Story("4", 1, "Halo Legends", "Sci-Fi", 85, 130, "https://picsum.photos/200", 4));
-//        storyList.add(new Story("5", 1, "Hellbound", "Thriller", 70, 100, "https://picsum.photos/200", 4));
+        // Load dữ liệu thể loại từ Database
+        loadGenres();
 
-        filteredList.addAll(storyList);
-        titleFilteredList.addAll(storyList);
-
-        storyAdapter = new StorySearchViewAdapter(filteredList, this);
-        rvSearchListTemp.setAdapter(storyAdapter);
-
-        titleAdapter = new StoryTitleAdapter(titleFilteredList, this, title -> {
-            searchView.setQuery(title, false);
-            filterList(title);
-            rvSearchListTemp.setVisibility(View.VISIBLE);
-            rvSearchSuggestions.setVisibility(View.GONE);
-            hideKeyboard();
+        // Xử lý khi nhấn nút "Search"
+        btnSearch.setOnClickListener(v -> {
+            String query = searchView.getQuery().toString().trim();
+            if (!query.isEmpty()) {
+                searchStories(query);
+            }
         });
-        rvSearchSuggestions.setAdapter(titleAdapter);
 
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+        // Xử lý khi chọn bộ lọc
+        AdapterView.OnItemSelectedListener filterListener = new AdapterView.OnItemSelectedListener() {
             @Override
-            public boolean onQueryTextSubmit(String query) {
-                filterList(query);
-                rvSearchListTemp.setVisibility(View.VISIBLE);
-                rvSearchSuggestions.setVisibility(View.GONE);
-                hideKeyboard();
-                return false;
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                applyFilters();
             }
 
             @Override
-            public boolean onQueryTextChange(String newText) {
-                filterTitleList(newText);
-                return true;
-            }
-        });
+            public void onNothingSelected(AdapterView<?> parent) {}
+        };
 
-        searchView.setOnQueryTextFocusChangeListener((v, hasFocus) -> {
-            if (!hasFocus) {
-                rvSearchSuggestions.setVisibility(View.GONE);
-            }
-        });
+        spinnerLength.setOnItemSelectedListener(filterListener);
+        spinnerLastUpdated.setOnItemSelectedListener(filterListener);
+        spinnerGenre.setOnItemSelectedListener(filterListener);
+    }
 
-        EditText searchEditText = searchView.findViewById(androidx.appcompat.R.id.search_src_text);
-        searchEditText.setOnEditorActionListener((TextView v, int actionId, KeyEvent event) -> {
-            if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                filterList(searchView.getQuery().toString());
-                rvSearchListTemp.setVisibility(View.VISIBLE);
-                rvSearchSuggestions.setVisibility(View.GONE);
-                hideKeyboard();
-                return true;
-            }
-            return false;
-        });
-        searchEditText.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
+    // Load danh sách thể loại từ Database
+    private void loadGenres() {
+        List<String> genreList = new ArrayList<>();
+        genreIdList = new ArrayList<>();
 
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (s.toString().trim().isEmpty()) {
-                    rvSearchListTemp.setVisibility(View.GONE); // Ẩn danh sách nếu không có chữ
-                } else {
-                    rvSearchListTemp.setVisibility(View.VISIBLE); // Hiển thị nếu có chữ
-                }
-            }
+        // Thêm lựa chọn "Tất cả thể loại"
+        genreList.add("All Genres");
+        genreIdList.add(-1);
 
-            @Override
-            public void afterTextChanged(Editable s) {
-            }
-        });
-        BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigationView);
+        Cursor cursor = databaseHandler.getReadableDatabase().rawQuery("SELECT GenreId, Name FROM Genre", null);
+        if (cursor.moveToFirst()) {
+            do {
+                genreIdList.add(cursor.getInt(0));
+                genreList.add(cursor.getString(1));
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
 
-        bottomNavigationView.setOnItemSelectedListener(item -> {
-            if (item.getItemId() == R.id.search) {
-                // Chuyển sang SearchActivity khi bấm vào Search
-                Intent intent = new Intent(SearchActivity.this, SearchActivity.class);
-                startActivity(intent);
-                return true;
-            }
-            return false;
-        });
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, genreList);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerGenre.setAdapter(adapter);
 
     }
 
-    private void filterList(String query) {
-        filteredList.clear();
-        if (TextUtils.isEmpty(query)) {
-            filteredList.addAll(storyList);
+    private void searchStories(String query) {
+        searchResults.clear();
+
+        Cursor cursor = databaseHandler.getReadableDatabase().rawQuery(
+                "SELECT Story.*, " +
+                        "(SELECT COUNT(*) FROM Chapter WHERE Story.StoryId = Chapter.StoryId) AS ChapterCount, " +
+                        "(SELECT COALESCE(SUM(ReadingHistory.[View]), 0) FROM ReadingHistory WHERE Story.StoryId = ReadingHistory.StoryId) AS ViewCount " +
+                        "FROM Story " +
+                        "WHERE Story.Title LIKE ? " +
+                        "ORDER BY ViewCount DESC",
+                new String[]{"%" + query + "%"}
+        );
+
+        if (cursor.moveToFirst()) {
+            do {
+                Story story = new Story(
+                        cursor.getInt(0), cursor.getInt(1), cursor.getString(2),
+                        cursor.getString(3), cursor.getString(4), cursor.getInt(5),
+                        cursor.getString(6), cursor.getString(7), cursor.getString(8)
+                );
+                searchResults.add(story);
+            } while (cursor.moveToNext());
+        }
+
+        cursor.close();
+        searchAdapter.notifyDataSetChanged();
+
+        // Hiển thị bộ lọc khi có kết quả
+        if (!searchResults.isEmpty()) {
+            rvSearchResults.setVisibility(View.VISIBLE);
+            filterContainer.setVisibility(View.VISIBLE);
         } else {
-            for (Story story : storyList) {
-                if (story.getTitle().toLowerCase().contains(query.toLowerCase())) {
-                    filteredList.add(story);
-                }
-            }
+            rvSearchResults.setVisibility(View.GONE);
+            filterContainer.setVisibility(View.GONE);
         }
-        storyAdapter.notifyDataSetChanged();
     }
 
-    private void filterTitleList(String query) {
-        titleFilteredList.clear();
-        if (TextUtils.isEmpty(query)) {
-            rvSearchSuggestions.setVisibility(View.GONE);
-        } else {
-            for (Story story : storyList) {
-                if (story.getTitle().toLowerCase().contains(query.toLowerCase())) {
-                    titleFilteredList.add(story);
+    private void applyFilters() {
+        String lengthFilter = spinnerLength.getSelectedItem().toString();
+        String updateFilter = spinnerLastUpdated.getSelectedItem().toString();
+        int genreId = genreIdList.get(spinnerGenre.getSelectedItemPosition()); // Lấy ID thể loại
+        reloadSearchResults();  // Lấy lại tất cả câu chuyện từ Database
+
+        List<Story> filteredResults = new ArrayList<>();
+        for (Story story : searchResults) {
+            boolean matches = true;
+
+            // **Lọc theo số chương (Length Filter)**
+            int chapterCount = databaseHandler.getChaptersByStoryId(story.getStory_id()).size();
+            if (lengthFilter.equals("Short (1-10 chapters)") && chapterCount > 10) matches = false;
+            if (lengthFilter.equals("Medium (11-50 chapters)") && (chapterCount <= 10 || chapterCount > 50)) matches = false;
+            if (lengthFilter.equals("Long (51+ chapters)") && chapterCount <= 50) matches = false;
+
+            // **Lọc theo thể loại (Genre Filter)**
+            if (genreId != -1 && story.getGenre_id() != genreId) matches = false;
+
+            // **Lọc theo ngày cập nhật gần đây (Last Updated Filter)**
+            if (!updateFilter.equals("All")) {
+                Cursor cursor = databaseHandler.getReadableDatabase().rawQuery(
+                        "SELECT UpdatedAt FROM Story WHERE StoryId = ?", new String[]{String.valueOf(story.getStory_id())});
+                if (cursor.moveToFirst()) {
+                    String updatedAt = cursor.getString(0);
+                    if (updatedAt != null) {
+                        long daysDifference = getDaysDifference(updatedAt);
+                        if (updateFilter.equals("Last 7 days") && daysDifference > 7) matches = false;
+                        if (updateFilter.equals("Last 30 days") && daysDifference > 30) matches = false;
+                    }
                 }
+                cursor.close();
             }
-            rvSearchSuggestions.setVisibility(View.VISIBLE);
+
+            // Nếu câu chuyện thỏa mãn tất cả các điều kiện lọc, thêm vào danh sách kết quả
+            if (matches) filteredResults.add(story);
         }
-        titleAdapter.notifyDataSetChanged();
+
+        // Cập nhật dữ liệu cho adapter
+        searchAdapter.updateData(filteredResults);
     }
 
-    private void hideKeyboard() {
-        View view = this.getCurrentFocus();
-        if (view != null) {
-            InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
-            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+
+    // **Hàm hỗ trợ tính số ngày từ ngày cập nhật đến hiện tại**
+    private long getDaysDifference(String updatedAt) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+        try {
+            Date updatedDate = sdf.parse(updatedAt);
+            Date currentDate = new Date();
+            long difference = currentDate.getTime() - updatedDate.getTime();
+            return TimeUnit.DAYS.convert(difference, TimeUnit.MILLISECONDS);
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return Long.MAX_VALUE; // Tránh lọc sai nếu gặp lỗi
         }
     }
+
+
+    private void reloadSearchResults() {
+        searchResults.clear();
+
+        Cursor cursor = databaseHandler.getReadableDatabase().rawQuery(
+                "SELECT Story.*, " +
+                        "(SELECT COUNT(*) FROM Chapter WHERE Story.StoryId = Chapter.StoryId) AS ChapterCount, " +
+                        "(SELECT COALESCE(SUM(ReadingHistory.[View]), 0) FROM ReadingHistory WHERE Story.StoryId = ReadingHistory.StoryId) AS ViewCount " +
+                        "FROM Story " +
+                        "ORDER BY ViewCount DESC", null
+        );
+
+        if (cursor.moveToFirst()) {
+            do {
+                Story story = new Story(
+                        cursor.getInt(0), cursor.getInt(1), cursor.getString(2),
+                        cursor.getString(3), cursor.getString(4), cursor.getInt(5),
+                        cursor.getString(6), cursor.getString(7), cursor.getString(8)
+                );
+                searchResults.add(story);
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+    }
+
 }

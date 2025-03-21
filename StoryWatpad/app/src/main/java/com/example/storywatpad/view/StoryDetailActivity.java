@@ -1,9 +1,12 @@
 package com.example.storywatpad.view;
 
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -23,7 +26,7 @@ import java.util.List;
 import xyz.schwaab.avvylib.AvatarView;
 
 public class StoryDetailActivity extends AppCompatActivity {
-    private TextView tvStoryTitle, tvStoryCategory, tvStoryDescription, tvTotalChapters,txtUserName,tvViews,tvLikes,tvParts;
+    private TextView tvStoryTitle, tvStoryCategory, tvStoryDescription, tvTotalChapters, txtUserName, tvViews, tvLikes, tvParts;
     private ImageView storyView;
     private RecyclerView rvChapters, tagRecyclerView;
     private ChapterAdapter chapterAdapter;
@@ -32,34 +35,29 @@ public class StoryDetailActivity extends AppCompatActivity {
     private int storyId;
     AvatarView avatarView;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_story_detail);
+
         // Khai báo nút btnBack
         ImageView btnBack = findViewById(R.id.btnBack);
 
-// Xử lý sự kiện khi bấm nút Back
-        btnBack.setOnClickListener(view -> {
-            finish(); // Đóng Activity hiện tại để quay lại MainActivity
-        });
+        // Xử lý sự kiện khi bấm nút Back
+        btnBack.setOnClickListener(view -> finish()); // Đóng Activity hiện tại để quay lại MainActivity
 
         // Nhận storyId từ Intent
         storyId = getIntent().getIntExtra("story_id", -1);
 
         // Khởi tạo DatabaseHandler
         databaseHandler = new DatabaseHandler(this);
+
         // Ánh xạ View
         txtUserName = findViewById(R.id.txtUserName);
         avatarView = findViewById(R.id.avatarView);
         tvViews = findViewById(R.id.tvViews);
-
-
         tvLikes = findViewById(R.id.tvLikes);
         tvParts = findViewById(R.id.tvParts);
-
-        // Ánh xạ các thành phần UI
         tvStoryTitle = findViewById(R.id.txtTitle);
         tvStoryCategory = findViewById(R.id.tvStoryCategory);
         tvStoryDescription = findViewById(R.id.tvStoryDescription);
@@ -67,6 +65,14 @@ public class StoryDetailActivity extends AppCompatActivity {
         storyView = findViewById(R.id.storyView);
         rvChapters = findViewById(R.id.rvChapters);
         tagRecyclerView = findViewById(R.id.tag_recycler_view);
+        Button btnRead = findViewById(R.id.btnRead);
+
+        btnRead.setOnClickListener(v -> startReading());
+
+        // Xử lý sự kiện khi nhấn vào AvatarView hoặc tên tác giả
+        avatarView.setOnClickListener(v -> openAuthorProfile());
+
+        txtUserName.setOnClickListener(v -> openAuthorProfile());
 
         // Lấy dữ liệu từ SQLite
         loadStoryDetails();
@@ -74,7 +80,41 @@ public class StoryDetailActivity extends AppCompatActivity {
         loadTags();
         loadViewLikePartCount(storyId);
         loadAuthorInfo(storyId);
+    }
 
+    // Mở AuthorProfileActivity và chuyển authorId
+    private void openAuthorProfile() {
+        // Lấy authorId từ storyId
+        Story story = databaseHandler.getStoryById(storyId);
+        if (story != null) {
+            int authorId = story.getAuthor_id();
+            Intent intent = new Intent(StoryDetailActivity.this, AuthorProfileActivity.class);
+            intent.putExtra("author_id", authorId);
+            startActivity(intent);
+        }
+    }
+
+    private void startReading() {
+        SharedPreferences sharedPreferences = getSharedPreferences("user_prefs", MODE_PRIVATE);
+        int userId = sharedPreferences.getInt("userId", -1);
+
+        if (userId == -1) {
+            Toast.makeText(this, "Bạn cần đăng nhập để đọc truyện!", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        Chapter firstChapter = databaseHandler.getFirstChapterByStoryId(storyId);
+        if (firstChapter == null) {
+            Toast.makeText(this, "Truyện chưa có chương nào!", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        int chapterId = firstChapter.getChapterId();
+
+        Intent intent = new Intent(this, ChapterDetailActivity.class);
+        intent.putExtra("story_id", storyId);
+        intent.putExtra("chapter_id", chapterId);
+        startActivity(intent);
     }
 
     private void loadStoryDetails() {
@@ -84,7 +124,6 @@ public class StoryDetailActivity extends AppCompatActivity {
             tvStoryCategory.setText("✧･ﾟ: *✧ (" + story.getTitle() + ")");
             tvStoryDescription.setText(story.getDescription());
 
-            // Lấy ảnh bìa từ drawable
             int imageResId = getResources().getIdentifier(story.getDrawableImageName(), "drawable", getPackageName());
             if (imageResId != 0) {
                 storyView.setImageResource(imageResId);
@@ -109,13 +148,12 @@ public class StoryDetailActivity extends AppCompatActivity {
         tagRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
         tagRecyclerView.setAdapter(tagAdapter);
     }
-    // Lấy thông tin tác giả dựa trên StoryId
+
     private void loadAuthorInfo(int storyId) {
         User author = databaseHandler.getUserByStoryId(storyId);
         if (author != null) {
             txtUserName.setText(author.getUsername());
 
-            // Load ảnh avatar
             if (author.getAvatarUrl() != null && !author.getAvatarUrl().isEmpty()) {
                 int imageResId = getResources().getIdentifier(author.getAvatarUrl(), "drawable", getPackageName());
                 if (imageResId != 0) {
@@ -126,36 +164,25 @@ public class StoryDetailActivity extends AppCompatActivity {
             }
         }
     }
+
     private void loadViewLikePartCount(int storyId) {
         runOnUiThread(() -> {
-            // Lấy dữ liệu từ SQLite
             int viewCount = databaseHandler.getViewCountForStory(storyId);
             int likeCount = databaseHandler.getLikeCountByStoryId(storyId);
             int partCount = databaseHandler.getChaptersByStoryId(storyId).size();
 
-            Log.d("View_Test", "Views: " + viewCount);
-            Log.d("Like_Test", "Likes: " + likeCount);
-            Log.d("Part_Test", "Parts: " + partCount);
-
-            // Kiểm tra nếu TextView không bị null
             if (tvViews != null) {
                 tvViews.setText(String.valueOf(viewCount));
-            } else {
-                Log.e("Error", "tvViews is null");
             }
 
             if (tvLikes != null) {
                 tvLikes.setText(String.valueOf(likeCount));
-            } else {
-                Log.e("Error", "tvLikes is null");
             }
 
             if (tvParts != null) {
                 tvParts.setText(String.valueOf(partCount));
-            } else {
-                Log.e("Error", "tvParts is null");
             }
         });
     }
-
 }
+

@@ -17,6 +17,13 @@ public class Chapter {
         this.updatedAt = updatedAt;
     }
 
+    public Chapter(int chapterId, int storyId, String title, String content) {
+        this.chapterId = chapterId;
+        this.storyId = storyId;
+        this.title = title;
+        this.content = content;
+    }
+
     public Chapter() {
     }
 
