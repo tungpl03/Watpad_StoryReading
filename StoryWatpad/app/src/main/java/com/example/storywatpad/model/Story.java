@@ -47,7 +47,16 @@ public class Story {
         this.created_at = created_at;
         this.updated_at = updated_at;
     }
-
+    // Constructor dành riêng cho tìm kiếm (bỏ created_at, updated_at)
+    public Story(int story_id, int author_id, String title, String description, String coverImageUrl, int genre_id, String status) {
+        this.story_id = story_id;
+        this.author_id = author_id;
+        this.title = title;
+        this.description = description;
+        this.CoverImageUrl = coverImageUrl;
+        this.genre_id = genre_id;
+        this.status = status;
+    }
     public int getStory_id() {
         return story_id;
     }

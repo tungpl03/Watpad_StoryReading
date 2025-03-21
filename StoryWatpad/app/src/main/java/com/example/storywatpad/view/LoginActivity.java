@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 
 import android.widget.EditText;
@@ -56,10 +57,16 @@ public class LoginActivity extends AppCompatActivity {
 
 
                 else {
+                    SP = getSharedPreferences("user_prefs", MODE_PRIVATE); // Đảm bảo key đồng bộ với StoryDetailActivity
                     SharedPreferences.Editor editor = SP.edit();
+                    editor.putInt("userId", user.getUserId()); // Đảm bảo key "userId" đồng nhất
                     editor.putString("Email", email);
                     editor.putString("Password", pass);
                     editor.apply();
+                    int savedUserId = SP.getInt("userId", -1);
+                    Log.d("DEBUG_USER", "Saved userId after login: " + savedUserId);
+
+
 
                     if ("user".equals(user.getRole())) {
 

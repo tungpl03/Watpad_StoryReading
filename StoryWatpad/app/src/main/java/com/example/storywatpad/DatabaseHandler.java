@@ -1,5 +1,6 @@
 package com.example.storywatpad;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -81,17 +82,19 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
     }
     public int getViewCountForStory(int storyId) {
-        int viewCount = 0;
         SQLiteDatabase db = this.getReadableDatabase();
-        String query = "SELECT COUNT(*) FROM ReadingHistory WHERE StoryId = ? AND [View] = 1";
+        int totalViews = 0;
+
+        String query = "SELECT SUM([View]) FROM ReadingHistory WHERE StoryId = ?";
         Cursor cursor = db.rawQuery(query, new String[]{String.valueOf(storyId)});
 
         if (cursor.moveToFirst()) {
-            viewCount = cursor.getInt(0);
+            totalViews = cursor.getInt(0);
         }
         cursor.close();
-        return viewCount;
+        return totalViews;
     }
+
     public int getLikeCountByStoryId(int storyId) {
         int likeCount = 0;
         SQLiteDatabase db = SQLiteDatabase.openDatabase(dbPath, null, SQLiteDatabase.OPEN_READWRITE);
@@ -294,6 +297,250 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         db.execSQL("UPDATE User SET PasswordHash = ? WHERE Email = ?", new String[]{newPassword, email});
         db.close();
     }
+    public Chapter getFirstChapterByStoryId(int storyId) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Chapter chapter = null;
+
+        String query = "SELECT * FROM Chapter WHERE StoryId = ? ORDER BY ChapterId ASC LIMIT 1";
+        Cursor cursor = db.rawQuery(query, new String[]{String.valueOf(storyId)});
+
+        if (cursor.moveToFirst()) {
+            chapter = new Chapter(
+                    cursor.getInt(0),   // ChapterId
+                    cursor.getInt(1),   // StoryId
+                    cursor.getString(2),// Title
+                    cursor.getString(3) // Content
+            );
+        }
+        cursor.close();
+        db.close();
+        return chapter;
+    }
+    public void updateReadingHistory(int userId, int storyId, int chapterId) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        // Kiểm tra xem đã có bản ghi chưa
+        String query = "SELECT [View] FROM ReadingHistory WHERE UserId = ? AND StoryId = ? AND ChapterId = ?";
+        Cursor cursor = db.rawQuery(query, new String[]{String.valueOf(userId), String.valueOf(storyId), String.valueOf(chapterId)});
+
+        if (cursor.moveToFirst()) {
+            // Nếu đã tồn tại, cập nhật View +1
+            int currentView = cursor.getInt(0);
+            ContentValues values = new ContentValues();
+            values.put("View", currentView + 1);
+            values.put("LastReadAt", System.currentTimeMillis()); // Cập nhật thời gian đọc gần nhất
+
+            db.update("ReadingHistory", values, "UserId = ? AND StoryId = ? AND ChapterId = ?",
+                    new String[]{String.valueOf(userId), String.valueOf(storyId), String.valueOf(chapterId)});
+        } else {
+            // Nếu chưa có, tạo mới
+            ContentValues values = new ContentValues();
+            values.put("UserId", userId);
+            values.put("StoryId", storyId);
+            values.put("ChapterId", chapterId);
+            values.put("Like", 0);
+            values.put("View", 1); // Lần đầu đọc -> View = 1
+            values.put("LastReadAt", System.currentTimeMillis());
+
+            db.insert("ReadingHistory", null, values);
+        }
+
+        cursor.close();
+        db.close();
+    }
+
+    public Chapter getChapterById(int storyId, int chapterId) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Chapter chapter = null;
+
+        String query = "SELECT * FROM Chapter WHERE StoryId = ? AND ChapterId = ?";
+        Cursor cursor = db.rawQuery(query, new String[]{String.valueOf(storyId), String.valueOf(chapterId)});
+
+        if (cursor.moveToFirst()) {
+            chapter = new Chapter(
+                    cursor.getInt(0),   // ChapterId
+                    cursor.getInt(1),   // StoryId
+                    cursor.getString(2),// Title
+                    cursor.getString(3) // Content
+            );
+        }
+        cursor.close();
+        db.close();
+        return chapter;
+    }
+    public String getStoryTitleById(int storyId) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        String title = "";
+
+        String query = "SELECT Title FROM Story WHERE StoryId = ?";
+        Cursor cursor = db.rawQuery(query, new String[]{String.valueOf(storyId)});
+
+        if (cursor.moveToFirst()) {
+            title = cursor.getString(0);
+        }
+        cursor.close();
+        db.close();
+        return title;
+    }
+    public int getChapterViewCount(int storyId, int chapterId) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        int chapterViews = 0;
+
+        String query = "SELECT COALESCE(SUM([View]), 0) FROM ReadingHistory WHERE StoryId = ? AND ChapterId = ?";
+        Cursor cursor = db.rawQuery(query, new String[]{String.valueOf(storyId), String.valueOf(chapterId)});
+
+        if (cursor.moveToFirst()) {
+            chapterViews = cursor.getInt(0);
+        }
+        cursor.close();
+        return chapterViews;
+    }
+
+
+    public int getChapterLikeCount(int storyId, int chapterId) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        int likes = 0;
+
+        String query = "SELECT COUNT(*) FROM ReadingHistory WHERE StoryId = ? AND ChapterId = ? AND [Like] = 1";
+        Cursor cursor = db.rawQuery(query, new String[]{String.valueOf(storyId), String.valueOf(chapterId)});
+
+        if (cursor.moveToFirst()) {
+            likes = cursor.getInt(0);
+        }
+        cursor.close();
+        db.close();
+        return likes;
+    }
+    public boolean isChapterLiked(int userId, int storyId, int chapterId) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        boolean isLiked = false;
+
+        String query = "SELECT [Like] FROM ReadingHistory WHERE UserId = ? AND StoryId = ? AND ChapterId = ?";
+        Cursor cursor = db.rawQuery(query, new String[]{String.valueOf(userId), String.valueOf(storyId), String.valueOf(chapterId)});
+
+        if (cursor.moveToFirst()) {
+            isLiked = cursor.getInt(0) == 1;
+        }
+        cursor.close();
+        db.close();
+        return isLiked;
+    }
+    public int getCommentCount(int storyId, int chapterId) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        int count = 0;
+
+        String query = "SELECT COUNT(*) FROM Comment WHERE StoryId = ? AND ChapterId = ?";
+        Cursor cursor = db.rawQuery(query, new String[]{String.valueOf(storyId), String.valueOf(chapterId)});
+
+        if (cursor.moveToFirst()) {
+            count = cursor.getInt(0);
+        }
+        cursor.close();
+        db.close();
+        return count;
+    }
+
+    public void updateLikeStatus(int userId, int storyId, int chapterId, boolean isLiked) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        // Kiểm tra xem bản ghi đã tồn tại trong ReadingHistory chưa
+        String checkQuery = "SELECT * FROM ReadingHistory WHERE UserId = ? AND StoryId = ? AND ChapterId = ?";
+        Cursor cursor = db.rawQuery(checkQuery, new String[]{String.valueOf(userId), String.valueOf(storyId), String.valueOf(chapterId)});
+
+        if (cursor.moveToFirst()) {
+            // Nếu đã tồn tại, cập nhật Like (1 hoặc 0)
+            ContentValues values = new ContentValues();
+            values.put("Like", isLiked ? 1 : 0);
+
+            db.update("ReadingHistory", values, "UserId = ? AND StoryId = ? AND ChapterId = ?",
+                    new String[]{String.valueOf(userId), String.valueOf(storyId), String.valueOf(chapterId)});
+        } else {
+            // Nếu chưa tồn tại, tạo bản ghi mới trong ReadingHistory
+            ContentValues values = new ContentValues();
+            values.put("UserId", userId);
+            values.put("StoryId", storyId);
+            values.put("ChapterId", chapterId);
+            values.put("View", 1); // Lượt xem mặc định là 1 khi tạo mới
+            values.put("Like", isLiked ? 1 : 0);
+
+            db.insert("ReadingHistory", null, values);
+        }
+
+        cursor.close();
+        db.close();
+    }
+    // Lấy chương tiếp theo
+    public Chapter getNextChapter(int storyId, int currentChapterId) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT * FROM Chapter WHERE StoryId = ? AND ChapterId > ? ORDER BY ChapterId ASC LIMIT 1",
+                new String[]{String.valueOf(storyId), String.valueOf(currentChapterId)});
+
+        if (cursor.moveToFirst()) {
+            Chapter chapter = new Chapter(cursor.getInt(0), cursor.getInt(1),
+                    cursor.getString(2), cursor.getString(3),
+                    cursor.getString(4), cursor.getString(5));
+            cursor.close();
+            return chapter;
+        }
+
+        cursor.close();
+        return null;
+    }
+
+    // Lấy chương trước đó
+    public Chapter getPreviousChapter(int storyId, int currentChapterId) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT * FROM Chapter WHERE StoryId = ? AND ChapterId < ? ORDER BY ChapterId DESC LIMIT 1",
+                new String[]{String.valueOf(storyId), String.valueOf(currentChapterId)});
+
+        if (cursor.moveToFirst()) {
+            Chapter chapter = new Chapter(cursor.getInt(0), cursor.getInt(1),
+                    cursor.getString(2), cursor.getString(3),
+                    cursor.getString(4), cursor.getString(5));
+            cursor.close();
+            return chapter;
+        }
+
+        cursor.close();
+        return null;
+    }
+    public List<Story> getStoriesByAuthorId(int authorId) {
+        List<Story> storyList = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();  // Lấy đối tượng SQLiteDatabase
+
+        // Truy vấn SQL để lấy tất cả các câu chuyện theo authorId
+        Cursor cursor = db.rawQuery(
+                "SELECT * FROM Story WHERE AuthorId = ?",
+                new String[]{String.valueOf(authorId)});  // Truyền authorId vào câu truy vấn
+
+        // Kiểm tra nếu có kết quả
+        if (cursor != null && cursor.moveToFirst()) {
+            do {
+                // Tạo đối tượng Story và thêm vào danh sách
+                Story story = new Story(
+                        cursor.getInt(0),
+                        cursor.getInt(1),
+                        cursor.getString(2),
+                        cursor.getString(3),
+                        cursor.getString(4),
+                        cursor.getInt(5),
+                        cursor.getString(6),
+                        cursor.getString(7),
+                        cursor.getString(8)
+                );
+                storyList.add(story);  // Thêm truyện vào danh sách
+            } while (cursor.moveToNext());  // Tiến đến truy vấn tiếp theo
+        }
+
+        // Đóng con trỏ sau khi sử dụng xong
+        if (cursor != null) {
+            cursor.close();
+        }
+
+        // Trả về danh sách các truyện
+        return storyList;
+    }
+
 
     public void upDateProfile(String email, String AvatarUrl, String bio, String username) {
         SQLiteDatabase db = this.getWritableDatabase();
