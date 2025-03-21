@@ -10,8 +10,30 @@ public class Story {
     String status;
     String created_at;
     String updated_at;
+    boolean isHidden;
 
     public Story() {
+    }
+
+    public boolean isHidden() {
+        return isHidden;
+    }
+
+    public void setHidden(boolean hidden) {
+        isHidden = hidden;
+    }
+
+    public Story(int story_id, int author_id, String title, String description, String coverImageUrl, int genre_id, String status, String created_at, String updated_at, boolean isHidden) {
+        this.story_id = story_id;
+        this.author_id = author_id;
+        this.title = title;
+        this.description = description;
+        CoverImageUrl = coverImageUrl;
+        this.genre_id = genre_id;
+        this.status = status;
+        this.created_at = created_at;
+        this.updated_at = updated_at;
+        this.isHidden = isHidden;
     }
 
     public Story(int story_id, int author_id, String title, String description, String coverImageUrl, int genre_id, String status, String created_at, String updated_at) {

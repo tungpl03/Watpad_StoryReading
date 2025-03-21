@@ -51,6 +51,8 @@
             android:exported="false"/>
         <activity android:name=".view.AccountManageActivity"
             android:exported="false"/>
+        <activity android:name=".view.StoryManageActivity"
+            android:exported="false"/>
 
         <activity
             android:name=".view.LoginActivity"

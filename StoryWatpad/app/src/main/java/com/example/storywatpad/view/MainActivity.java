@@ -96,7 +96,7 @@ public class MainActivity extends AppCompatActivity {
     private List<Story> getHotStories() {
         List<Story> hotStories = new ArrayList<>();
         Cursor cursor = db.getCursor("SELECT Story.*,sum(like) as totallike" +
-                " FROM Story JOIN ReadingHistory WHERE Story.StoryId = ReadingHistory.StoryId" +
+                " FROM Story JOIN ReadingHistory WHERE Story.StoryId = ReadingHistory.StoryId and Story.isHidden = 0" +
                 " GROUP BY Story.StoryId" +
                 " ORDER BY totallike desc;");
         if (cursor.moveToFirst()) {
@@ -120,7 +120,7 @@ public class MainActivity extends AppCompatActivity {
 
     private List<Story> getAllStories() {
         List<Story> allStories = new ArrayList<>();
-        Cursor cursor = db.getCursor("SELECT * FROM Story");
+        Cursor cursor = db.getCursor("SELECT * FROM Story where isHidden = 0");
         if (cursor.moveToFirst()) {
             do{
                 Story st = new Story(cursor.getInt(0),

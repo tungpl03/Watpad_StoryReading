@@ -41,7 +41,8 @@ public class AdminPageActivity extends AppCompatActivity {
         storyManage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Intent it = new Intent(AdminPageActivity.this, StoryManageActivity.class);
+                startActivity(it);
             }
         });
 

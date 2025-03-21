@@ -329,4 +329,56 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         db.close();
         return userList;
     }
+
+    public List<Story> getAllStoryForAd() {
+            List<Story> allStories = new ArrayList<>();
+            Cursor cursor = getCursor("SELECT * FROM Story");
+            if (cursor.moveToFirst()) {
+                do{
+                    Story st = new Story(cursor.getInt(0),
+                            cursor.getInt(1),
+                            cursor.getString(2),
+                            cursor.getString(3),
+                            cursor.getString(4),
+                            cursor.getInt(5),
+                            cursor.getString(6),
+                            cursor.getString(7),
+                            cursor.getString(8));
+                    allStories.add(st);
+                }while (cursor.moveToNext());
+            }
+            cursor.close();
+
+            return allStories;
+
+
+    }
+
+    public List<Story> getStoryForAuthor(int id) {
+        List<Story> allStories = new ArrayList<>();
+        Cursor cursor = this.getReadableDatabase().rawQuery(
+                "SELECT * FROM Story WHERE AuthorId = ? and isHidden = 0",
+                new String[]{String.valueOf(id)}
+        );
+        if (cursor.moveToFirst()) {
+            do{
+                Story st = new Story(cursor.getInt(0),
+                        cursor.getInt(1),
+                        cursor.getString(2),
+                        cursor.getString(3),
+                        cursor.getString(4),
+                        cursor.getInt(5),
+                        cursor.getString(6),
+                        cursor.getString(7),
+                        cursor.getString(8),
+                        Boolean.parseBoolean(cursor.getString(9)));
+                allStories.add(st);
+            }while (cursor.moveToNext());
+        }
+        cursor.close();
+
+        return allStories;
+
+
+    }
 }

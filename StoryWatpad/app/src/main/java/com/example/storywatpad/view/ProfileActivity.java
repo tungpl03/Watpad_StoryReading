@@ -8,23 +8,32 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.storywatpad.DatabaseHandler;
-import com.example.storywatpad.model.User;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.storywatpad.DatabaseHandler;
 import com.example.storywatpad.R;
+import com.example.storywatpad.model.Story;
+import com.example.storywatpad.model.User;
+import com.example.storywatpad.view.adapter.StoryAdapter;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ProfileActivity extends AppCompatActivity {
 
     private boolean isAccountSettingsVisible = false;
-
+    private boolean isStoryByMeSettingsVisible = false;
+    StoryAdapter adapter;
     User user;
     SharedPreferences SP;
     ImageView avatar;
     TextView NameText, EmailText, Bio;
+    RecyclerView rvStoryByAuthor;
+    List<Story> arrStoryByAuthor = new ArrayList<>();
     AppCompatButton backToHome, logOut, aaps, storyByMe, profileSettingsButton, changePasswordButton;
 
     private DatabaseHandler db = new DatabaseHandler(this);
@@ -58,6 +67,25 @@ public class ProfileActivity extends AppCompatActivity {
             startActivity(it);
             }
         });
+        storyByMe.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                isStoryByMeSettingsVisible = !isStoryByMeSettingsVisible;
+                if(isStoryByMeSettingsVisible){
+                    rvStoryByAuthor.setVisibility(View.VISIBLE);
+                }
+                else{
+                    rvStoryByAuthor.setVisibility(View.GONE);
+                }
+            }
+        });
+
+        arrStoryByAuthor = db.getStoryForAuthor(user.getUserId());
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+        rvStoryByAuthor.setLayoutManager(layoutManager);
+        rvStoryByAuthor.setNestedScrollingEnabled(false);
+        adapter = new StoryAdapter(arrStoryByAuthor, this);
+        rvStoryByAuthor.setAdapter(adapter);
 
         aaps.setOnClickListener(new View.OnClickListener() {
              @Override
@@ -100,6 +128,8 @@ public class ProfileActivity extends AppCompatActivity {
             }
         });
 
+
+
     }
 
     private void Init() {
@@ -113,5 +143,6 @@ public class ProfileActivity extends AppCompatActivity {
         profileSettingsButton = findViewById(R.id.profileSettingsButton);
         changePasswordButton = findViewById(R.id.changePasswordButton);
         Bio = findViewById(R.id.Bio);
+        rvStoryByAuthor = findViewById(R.id.rvStoryByAuthor);
     }
 }
