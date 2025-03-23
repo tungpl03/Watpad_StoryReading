@@ -49,7 +49,8 @@ public class AdminPageActivity extends AppCompatActivity {
         statistic.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Intent it = new Intent(AdminPageActivity.this, StatisticActivity.class);
+                startActivity(it);
             }
         });
 

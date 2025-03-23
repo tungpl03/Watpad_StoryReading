@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.example.storywatpad">
 
 
 
@@ -23,40 +24,46 @@
         tools:targetApi="31">
 
         <activity
-            android:name=".view.StoryDetailActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:name=".view.StoryDetailActivity" />
         <activity
-            android:name=".view.RegisterActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:name=".view.RegisterActivity" />
         <activity
-            android:name=".view.SearchActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:name=".view.SearchActivity" />
         <activity
-            android:name=".view.MainActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:name=".view.MainActivity" />
         <activity
-            android:name=".view.ProfileActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:name=".view.ProfileActivity" />
         <activity
-            android:name=".view.ForgetPasswordActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:name=".view.ForgetPasswordActivity" />
         <activity
-            android:name=".view.ChangePasswordActivity"
-            android:exported="false" />
-
-        <activity android:name=".view.ChangeProfileActivity"
-            android:exported="false" />
-
-        <activity android:name=".view.AdminPageActivity"
-            android:exported="false"/>
-        <activity android:name=".view.AccountManageActivity"
-            android:exported="false"/>
-        <activity android:name=".view.StoryManageActivity"
-            android:exported="false"/>
+            android:exported="false"
+            android:name=".view.ChangePasswordActivity" />
 
         <activity
-            android:name=".view.LoginActivity"
-            android:exported="true">
+            android:exported="false"
+            android:name=".view.ChangeProfileActivity" />
+
+        <activity
+            android:exported="false"
+            android:name=".view.AdminPageActivity" />
+        <activity
+            android:exported="false"
+            android:name=".view.AccountManageActivity" />
+        <activity
+            android:exported="false"
+            android:name=".view.StoryManageActivity" />
+        <activity
+            android:exported="false"
+            android:name=".view.StatisticActivity" />
+        <activity
+            android:exported="true"
+            android:name=".view.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />

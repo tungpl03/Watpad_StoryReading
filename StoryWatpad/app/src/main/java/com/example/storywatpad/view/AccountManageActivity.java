@@ -47,6 +47,6 @@ public class AccountManageActivity extends AppCompatActivity {
         back = findViewById(R.id.back);
         back.setOnClickListener(view -> {
             finish(); // Đóng Activity hiện tại để quay lại MainActivity
-        });;
+        });
     }
 }
