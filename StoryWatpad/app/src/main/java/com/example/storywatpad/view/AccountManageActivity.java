@@ -41,7 +41,7 @@ public class AccountManageActivity extends AppCompatActivity {
 
         userList = db.getAllUser();
 
-        adapter = new AccountAdapter(this, userList);
+        adapter = new AccountAdapter(this, userList, db);
         accountList.setAdapter(adapter);
 
         back = findViewById(R.id.back);

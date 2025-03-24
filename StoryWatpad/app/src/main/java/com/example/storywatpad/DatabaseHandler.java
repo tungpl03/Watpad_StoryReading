@@ -301,6 +301,12 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         db.close();
     }
 
+    public void banAccount(String newStatus, User user){
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.execSQL("UPDATE User SET status = ? WHERE UserId = ?", new String[]{newStatus, String.valueOf(user.getUserId())});
+        db.close();
+    }
+
     public List<User> getAllUser() {
         List<User> userList = new ArrayList<>();
         SQLiteDatabase db = SQLiteDatabase.openDatabase(dbPath, null, SQLiteDatabase.OPEN_READWRITE);
@@ -343,7 +349,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                             cursor.getInt(5),
                             cursor.getString(6),
                             cursor.getString(7),
-                            cursor.getString(8));
+                            cursor.getString(8),
+                            cursor.getInt(9) == 1);
                     allStories.add(st);
                 }while (cursor.moveToNext());
             }
@@ -371,7 +378,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                         cursor.getString(6),
                         cursor.getString(7),
                         cursor.getString(8),
-                        Boolean.parseBoolean(cursor.getString(9)));
+                        cursor.getInt(9) == 1);
                 allStories.add(st);
             }while (cursor.moveToNext());
         }
@@ -380,5 +387,36 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         return allStories;
 
 
+    }
+
+    public User getAuthor(int userId) {
+        Cursor cursor = this.getReadableDatabase().rawQuery(
+                "SELECT * FROM User WHERE UserId = ? ",
+                new String[]{String.valueOf(userId)}
+        );
+
+        User user = null;
+
+        if (cursor.moveToFirst()) {
+            user = new User(cursor.getInt(0),
+                    cursor.getString(1),
+                    cursor.getString(2),
+                    cursor.getString(3),
+                    cursor.getString(4),
+                    cursor.getString(5),
+                    cursor.getString(6),
+                    cursor.getString(7),
+                    cursor.getString(8),
+                    cursor.getString(9));
+        }
+
+        cursor.close(); // Đóng Cursor sau khi sử dụng
+        return user;
+    }
+
+    public void hiddenStory(int newIsHidden, Story story) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.execSQL("UPDATE Story SET isHidden = ? WHERE StoryId = ?", new String[]{String.valueOf(newIsHidden), String.valueOf(story.getStory_id())});
+        db.close();
     }
 }
