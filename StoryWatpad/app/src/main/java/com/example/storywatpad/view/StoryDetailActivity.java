@@ -1,5 +1,6 @@
 package com.example.storywatpad.view;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.ImageButton;
@@ -7,6 +8,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.AppCompatButton;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -76,6 +78,12 @@ public class StoryDetailActivity extends AppCompatActivity {
         loadViewLikePartCount(storyId);
         loadAuthorInfo(storyId);
 
+
+        AppCompatButton btnLibrary = findViewById(R.id.btnLibrary);
+        btnLibrary.setOnClickListener(v -> {
+            Intent intent = new Intent(StoryDetailActivity.this, BookmarkActivity.class);
+            startActivity(intent);
+        });
     }
 
     private void loadStoryDetails() {
