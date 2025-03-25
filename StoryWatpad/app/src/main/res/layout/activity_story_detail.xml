@@ -149,66 +149,80 @@
                     android:textColor="@color/black"
                     android:textSize="12sp"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent" />
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
                     android:id="@+id/textView11"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="8dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginEnd="200dp"
                     android:text="View"
                     android:textColor="@color/black"
                     android:textSize="12sp"
                     app:layout_constraintBaseline_toBaselineOf="@id/tvViews"
                     app:layout_constraintEnd_toStartOf="@+id/tvLikes"
-                    app:layout_constraintStart_toEndOf="@id/tvViews" />
+                    app:layout_constraintStart_toEndOf="@id/tvViews"
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <!-- Icon + Like Count -->
+
                 <TextView
                     android:id="@+id/tvLikes"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="907"
-                    android:textSize="12sp"
-                    android:textColor="@color/black"
+                    android:layout_marginStart="20dp"
                     android:drawableStart="@drawable/heart_svgrepo_com"
                     android:drawablePadding="4dp"
+                    android:text="907"
+                    android:textColor="@color/black"
+                    android:textSize="12sp"
+                    app:layout_constraintBaseline_toBaselineOf="@id/textView12"
                     app:layout_constraintStart_toEndOf="@id/textView11"
-                    app:layout_constraintBaseline_toBaselineOf="@id/textView12"/>
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
                     android:id="@+id/textView12"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
                     android:text="Like"
-                    android:textSize="12sp"
                     android:textColor="@color/black"
+                    android:textSize="12sp"
+                    app:layout_constraintBaseline_toBaselineOf="@id/tvLikes"
                     app:layout_constraintStart_toEndOf="@id/tvLikes"
-                    app:layout_constraintBaseline_toBaselineOf="@id/tvLikes"/>
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <!-- Icon + Chapter Count -->
                 <TextView
                     android:id="@+id/tvParts"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="12"
-                    android:textSize="12sp"
-                    android:textColor="@color/black"
+                    android:layout_marginStart="28dp"
                     android:drawableStart="@drawable/document_901"
                     android:drawablePadding="4dp"
+                    android:text="12"
+                    android:textColor="@color/black"
+                    android:textSize="12sp"
+                    app:layout_constraintBaseline_toBaselineOf="@id/textView13"
                     app:layout_constraintStart_toEndOf="@id/textView12"
-                    app:layout_constraintBaseline_toBaselineOf="@id/textView13"/>
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
                     android:id="@+id/textView13"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
                     android:text="Part"
-                    android:textSize="12sp"
                     android:textColor="@color/black"
+                    android:textSize="12sp"
+                    app:layout_constraintBaseline_toBaselineOf="@id/tvParts"
                     app:layout_constraintStart_toEndOf="@id/tvParts"
-                    app:layout_constraintBaseline_toBaselineOf="@id/tvParts"/>
+                    app:layout_constraintTop_toTopOf="parent" />
+
             </androidx.constraintlayout.widget.ConstraintLayout>
+
 
             <!-- Layout chứa hai nút Read và Library -->
             <LinearLayout

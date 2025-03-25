@@ -24,7 +24,7 @@ public class Comment {
         this.updatedAt = updatedAt;
     }
 
-    public Comment(int userId, Integer chapterId, Integer parentCommentId, Integer storyId, String content, String createdAt, String updatedAt) {
+    public Comment(int userId, Integer chapterId, Integer storyId, Integer parentCommentId, String content, String createdAt, String updatedAt) {
         this.userId = userId;
         this.chapterId = chapterId;
         this.parentCommentId = parentCommentId;

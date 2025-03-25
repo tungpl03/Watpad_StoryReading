@@ -1,5 +1,6 @@
 package com.example.storywatpad.view;
 
+import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.view.View;
@@ -15,6 +16,7 @@ import com.example.storywatpad.DatabaseHandler;
 import com.example.storywatpad.R;
 import com.example.storywatpad.model.Story;
 import com.example.storywatpad.view.adapter.StorySearchViewAdapter;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -110,6 +112,29 @@ public class SearchActivity extends AppCompatActivity {
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, genreList);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerGenre.setAdapter(adapter);
+        BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigationView);
+
+        bottomNavigationView.setOnItemSelectedListener(item -> {
+            if (item.getItemId() == R.id.home) {
+                // Chuyển sang SearchActivity khi bấm vào Search
+                Intent intent = new Intent(SearchActivity.this, MainActivity.class);
+                startActivity(intent);
+                return true;
+            }
+            if (item.getItemId() == R.id.search) {
+                // Chuyển sang SearchActivity khi bấm vào Search
+                Intent intent = new Intent(SearchActivity.this, SearchActivity.class);
+                startActivity(intent);
+                return true;
+            }
+            if (item.getItemId() == R.id.bookList) {
+                // Chuyển sang BookmarkActivity khi bấm vào Booklist
+                Intent intent = new Intent(SearchActivity.this, BookmarkActivity.class);
+                startActivity(intent);
+                return true;
+            }
+            return false;
+        });
 
     }
 
@@ -153,44 +178,59 @@ public class SearchActivity extends AppCompatActivity {
     private void applyFilters() {
         String lengthFilter = spinnerLength.getSelectedItem().toString();
         String updateFilter = spinnerLastUpdated.getSelectedItem().toString();
-        int genreId = genreIdList.get(spinnerGenre.getSelectedItemPosition()); // Lấy ID thể loại
-        reloadSearchResults();  // Lấy lại tất cả câu chuyện từ Database
+        int genreId = genreIdList.get(spinnerGenre.getSelectedItemPosition()); // Get genre ID
+        reloadSearchResults();  // Reload all stories from the database
 
         List<Story> filteredResults = new ArrayList<>();
-        for (Story story : searchResults) {
-            boolean matches = true;
 
-            // **Lọc theo số chương (Length Filter)**
-            int chapterCount = databaseHandler.getChaptersByStoryId(story.getStory_id()).size();
-            if (lengthFilter.equals("Short (1-10 chapters)") && chapterCount > 10) matches = false;
-            if (lengthFilter.equals("Medium (11-50 chapters)") && (chapterCount <= 10 || chapterCount > 50)) matches = false;
-            if (lengthFilter.equals("Long (51+ chapters)") && chapterCount <= 50) matches = false;
+        // Build the base query
+        StringBuilder queryBuilder = new StringBuilder("SELECT * FROM Story WHERE 1=1");
 
-            // **Lọc theo thể loại (Genre Filter)**
-            if (genreId != -1 && story.getGenre_id() != genreId) matches = false;
-
-            // **Lọc theo ngày cập nhật gần đây (Last Updated Filter)**
-            if (!updateFilter.equals("All")) {
-                Cursor cursor = databaseHandler.getReadableDatabase().rawQuery(
-                        "SELECT UpdatedAt FROM Story WHERE StoryId = ?", new String[]{String.valueOf(story.getStory_id())});
-                if (cursor.moveToFirst()) {
-                    String updatedAt = cursor.getString(0);
-                    if (updatedAt != null) {
-                        long daysDifference = getDaysDifference(updatedAt);
-                        if (updateFilter.equals("Last 7 days") && daysDifference > 7) matches = false;
-                        if (updateFilter.equals("Last 30 days") && daysDifference > 30) matches = false;
-                    }
-                }
-                cursor.close();
-            }
-
-            // Nếu câu chuyện thỏa mãn tất cả các điều kiện lọc, thêm vào danh sách kết quả
-            if (matches) filteredResults.add(story);
+        // Apply the length filter
+        if (lengthFilter.equals("Short (1-10 chapters)")) {
+            queryBuilder.append(" AND (SELECT COUNT(*) FROM Chapter WHERE StoryId = Story.StoryId) <= 10");
+        } else if (lengthFilter.equals("Medium (11-50 chapters)")) {
+            queryBuilder.append(" AND (SELECT COUNT(*) FROM Chapter WHERE StoryId = Story.StoryId) BETWEEN 11 AND 50");
+        } else if (lengthFilter.equals("Long (51+ chapters)")) {
+            queryBuilder.append(" AND (SELECT COUNT(*) FROM Chapter WHERE StoryId = Story.StoryId) > 50");
         }
 
-        // Cập nhật dữ liệu cho adapter
+        // Apply the genre filter
+        if (genreId != -1) {
+            queryBuilder.append(" AND GenreId = ").append(genreId);
+        }
+
+        // Apply sorting based on the update filter
+        if (updateFilter.equals("Most Recently Updated")) {
+            queryBuilder.append(" ORDER BY UpdatedAt DESC");
+        } else if (updateFilter.equals("Least Recently Updated")) {
+            queryBuilder.append(" ORDER BY UpdatedAt ASC");
+        }
+
+        // Execute the query
+        Cursor cursor = databaseHandler.getReadableDatabase().rawQuery(queryBuilder.toString(), null);
+
+        // Iterate through the results and add the stories to the list
+        while (cursor.moveToNext()) {
+            Story story = new Story();
+            story.setStory_id(cursor.getInt(0));
+            story.setAuthor_id(cursor.getInt(1));
+            story.setTitle(cursor.getString(2));
+            story.setDescription(cursor.getString(3));
+            story.setCoverImageUrl(cursor.getString(4));
+            story.setGenre_id(cursor.getInt(5));
+            story.setUpdated_at(cursor.getString(8));
+            // Set other fields for Story object
+
+            filteredResults.add(story);
+        }
+
+        cursor.close();
+
+        // Update the adapter with the sorted data
         searchAdapter.updateData(filteredResults);
     }
+
 
 
     // **Hàm hỗ trợ tính số ngày từ ngày cập nhật đến hiện tại**

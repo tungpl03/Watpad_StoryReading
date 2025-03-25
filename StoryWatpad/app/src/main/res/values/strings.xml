@@ -18,8 +18,8 @@
 
     <string-array name="filter_last_update_options">
         <item>All</item>
-        <item>Last 7 days</item>
-        <item>Last 30 days</item>
+        <item>Most Recently Updated</item>
+        <item>Least Recently Updated</item>
     </string-array>
 
     <string-array name="filter_genre_options">

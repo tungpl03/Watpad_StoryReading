@@ -63,6 +63,13 @@ public class ChapterDetailActivity extends AppCompatActivity {
             finish();
             return;
         }
+        btnComment.setOnClickListener(v -> {
+            Intent intent = new Intent(ChapterDetailActivity.this, ChapterCommentsActivity.class);
+            intent.putExtra("story_id", storyId); // Pass story ID
+            intent.putExtra("chapter_id", chapterId); // Pass chapter ID
+            startActivity(intent);
+        });
+
 
         // Hiển thị nội dung chương
         loadChapterDetails();

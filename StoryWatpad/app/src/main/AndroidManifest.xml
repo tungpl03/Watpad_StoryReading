@@ -3,16 +3,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.example.storywatpad">
 
-
-
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-
-
+    <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"
@@ -25,52 +21,56 @@
         android:theme="@style/Theme.StoryWatpad"
         tools:targetApi="31">
         <activity
+            android:name=".view.ChapterCommentsActivity"
+            android:exported="false" />
+        <activity
             android:name=".view.AuthorProfileActivity"
             android:exported="false" />
         <activity
             android:name=".view.ChapterDetailActivity"
             android:exported="false" />
         <activity
-            android:exported="false"
-            android:name=".view.StoryDetailActivity" />
+            android:name=".view.StoryDetailActivity"
+            android:exported="false" />
         <activity
-            android:exported="false"
-            android:name=".view.RegisterActivity" />
+            android:name=".view.RegisterActivity"
+            android:exported="false" />
         <activity
-            android:exported="false"
-            android:name=".view.SearchActivity" />
+            android:name=".view.SearchActivity"
+            android:exported="false" />
         <activity
-            android:exported="false"
-            android:name=".view.MainActivity" />
+            android:name=".view.MainActivity"
+            android:exported="false" />
         <activity
-            android:exported="false"
-            android:name=".view.ProfileActivity" />
+            android:name=".view.ProfileActivity"
+            android:exported="false" />
         <activity
-            android:exported="false"
-            android:name=".view.ForgetPasswordActivity" />
+            android:name=".view.ForgetPasswordActivity"
+            android:exported="false" />
         <activity
             android:name=".view.ChangePasswordActivity"
             android:exported="false" />
-
-        <activity android:name=".view.ChangeProfileActivity"
+        <activity
+            android:name=".view.ChangeProfileActivity"
             android:exported="false" />
-
-        <activity android:name=".view.AdminPageActivity"
-            android:exported="false"/>
-        <activity android:name=".view.AccountManageActivity"
-            android:exported="false"/>
-        <activity android:name=".view.StoryManageActivity"
-            android:exported="false"/>
-        <activity android:name=".view.BookmarkActivity"
-            android:exported="false"
-             />
-
         <activity
-            android:exported="false"
-            android:name=".view.StatisticActivity" />
+            android:name=".view.AdminPageActivity"
+            android:exported="false" />
         <activity
-            android:exported="true"
-            android:name=".view.LoginActivity">
+            android:name=".view.AccountManageActivity"
+            android:exported="false" />
+        <activity
+            android:name=".view.StoryManageActivity"
+            android:exported="false" />
+        <activity
+            android:name=".view.BookmarkActivity"
+            android:exported="false" />
+        <activity
+            android:name=".view.StatisticActivity"
+            android:exported="false" />
+        <activity
+            android:name=".view.LoginActivity"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

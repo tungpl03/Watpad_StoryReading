@@ -799,7 +799,7 @@ public List<Story> getStoryForAuthor(int id) {
     public long addComment(Comment comment) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
-
+        values.put("ChapterId", comment.getChapterId());
         values.put("UserId", comment.getUserId());
         values.put("StoryId", comment.getStoryId());
         values.put("ParentCommentId", comment.getParentCommentId());
@@ -817,7 +817,7 @@ public List<Story> getStoryForAuthor(int id) {
         List<Comment> commentList = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
 
-        String query = "SELECT * FROM Comment WHERE StoryId = ? ORDER BY CreatedAt DESC";
+        String query = "SELECT * FROM Comment WHERE StoryId = ? AND ChapterId IS NULL ORDER BY CreatedAt DESC";
         Cursor cursor = db.rawQuery(query, new String[]{String.valueOf(storyId)});
 
         if (cursor.moveToFirst()) {
@@ -849,24 +849,6 @@ public List<Story> getStoryForAuthor(int id) {
         }
         cursor.close();
         return username;
-    }
-    public void insertComment(Comment comment) {
-        SQLiteDatabase db = this.getWritableDatabase();
-
-        // Get the current timestamp
-        String timestamp = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(new Date());
-
-        ContentValues contentValues = new ContentValues();
-        contentValues.put("UserId", comment.getUserId());
-        contentValues.put("ChapterId", comment.getChapterId());
-        contentValues.put("StoryId", comment.getStoryId());
-        contentValues.put("ParentCommentId", comment.getParentCommentId());
-        contentValues.put("Content", comment.getContent());
-        contentValues.put("CreatedAt", timestamp);
-        contentValues.put("UpdatedAt", timestamp);  // assuming it's the same for both
-
-        // Insert the comment
-        db.insert("Comment", null, contentValues);
     }
     public long insertReplyComment(Comment comment) {
         SQLiteDatabase db = this.getWritableDatabase();
@@ -923,6 +905,31 @@ public List<Story> getStoryForAuthor(int id) {
         return replies;
     }
 
+    public List<Comment> getCommentsByChapterId(int storyId, int chapterId) {
+        List<Comment> comments = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = db.query("Comment", null, "StoryId = ? AND ChapterId = ?",
+                new String[]{String.valueOf(storyId), String.valueOf(chapterId)},
+                null, null, "CreatedAt ASC");
+
+        if (cursor != null) {
+            while (cursor.moveToNext()) {
+                Comment comment = new Comment();
+                comment.setCommentId(cursor.getInt(0));
+                comment.setUserId(cursor.getInt(1));
+                comment.setStoryId(cursor.getInt(3));
+                comment.setChapterId(cursor.getInt(2));
+                comment.setParentCommentId(cursor.isNull(4) ? null : cursor.getInt(4));
+                comment.setContent(cursor.getString(5));
+                comment.setCreatedAt(cursor.getString(6));
+                comment.setUpdatedAt(cursor.getString(7));
+                comments.add(comment);
+            }
+            cursor.close();
+        }
+        return comments;
+    }
 
 
 }

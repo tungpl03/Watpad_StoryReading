@@ -73,6 +73,12 @@ public class MainActivity extends AppCompatActivity {
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigationView);
 
         bottomNavigationView.setOnItemSelectedListener(item -> {
+            if (item.getItemId() == R.id.home) {
+                // Chuyển sang SearchActivity khi bấm vào Search
+                Intent intent = new Intent(MainActivity.this, MainActivity.class);
+                startActivity(intent);
+                return true;
+            }
             if (item.getItemId() == R.id.search) {
                 // Chuyển sang SearchActivity khi bấm vào Search
                 Intent intent = new Intent(MainActivity.this, SearchActivity.class);
