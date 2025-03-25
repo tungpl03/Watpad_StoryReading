@@ -57,7 +57,7 @@ public class LoginActivity extends AppCompatActivity {
 
 
                 else {
-                    SP = getSharedPreferences("user_prefs", MODE_PRIVATE); // Đảm bảo key đồng bộ với StoryDetailActivity
+//                    SP = getSharedPreferences("user_prefs", MODE_PRIVATE); // Đảm bảo key đồng bộ với StoryDetailActivity
                     SharedPreferences.Editor editor = SP.edit();
                     editor.putInt("userId", user.getUserId()); // Đảm bảo key "userId" đồng nhất
                     editor.putString("Email", email);

@@ -55,7 +55,7 @@ public class ChapterDetailActivity extends AppCompatActivity {
         imgHeart = findViewById(R.id.imgHeart);
 
         // Lấy userId từ SharedPreferences
-        SharedPreferences sharedPreferences = getSharedPreferences("user_prefs", MODE_PRIVATE);
+        SharedPreferences sharedPreferences = getSharedPreferences("wadpadlogin", MODE_PRIVATE);
         userId = sharedPreferences.getInt("userId", -1);
 
         if (userId == -1) {
