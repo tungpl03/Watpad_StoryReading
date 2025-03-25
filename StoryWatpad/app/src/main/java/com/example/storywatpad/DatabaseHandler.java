@@ -9,6 +9,7 @@ import android.widget.Toast;
 
 
 import com.example.storywatpad.model.Chapter;
+import com.example.storywatpad.model.Genre;
 import com.example.storywatpad.model.Story;
 import com.example.storywatpad.model.StoryTag;
 import com.example.storywatpad.model.User;
@@ -418,5 +419,26 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         db.execSQL("UPDATE Story SET isHidden = ? WHERE StoryId = ?", new String[]{String.valueOf(newIsHidden), String.valueOf(story.getStory_id())});
         db.close();
+    }
+
+    public String getGenrebyId(int genreId) {
+
+        Cursor cursor = this.getReadableDatabase().rawQuery(
+                "SELECT * FROM Genre WHERE GenreId = ? ",
+                new String[]{String.valueOf(genreId)}
+        );
+
+        Genre g = null;
+
+        if (cursor.moveToFirst()) {
+            g = new Genre(cursor.getInt(0),
+                    cursor.getString(1),
+                    cursor.getString(2)
+                    );
+
+        }
+
+        cursor.close(); // Đóng Cursor sau khi sử dụng
+        return g.getName();
     }
 }

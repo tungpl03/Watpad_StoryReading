@@ -74,6 +74,16 @@ public class StoryManageAdapter extends RecyclerView.Adapter<StoryManageAdapter.
         builder.setView(dialogView);
 
         ImageView imagestory = dialogView.findViewById(R.id.imagestory);
+
+        String imageName = story.getDrawableImageName(); // Gọi phương thức mới
+
+        int imageResId = context.getResources().getIdentifier(imageName, "drawable", context.getPackageName());
+
+        if (imageResId != 0) {
+            imagestory.setImageResource(imageResId);
+        } else {
+            imagestory.setImageResource(R.drawable.logocomic);
+        }
         TextView title = dialogView.findViewById(R.id.title);
         ShapeableImageView avatar = dialogView.findViewById(R.id.avatar);
         TextView author = dialogView.findViewById(R.id.author);
@@ -98,7 +108,7 @@ public class StoryManageAdapter extends RecyclerView.Adapter<StoryManageAdapter.
 
         title.setText(story.getTitle());
         author.setText(user.getUsername());
-        genre.setText(String.valueOf(story.getGenre_id()));
+        genre.setText(String.valueOf(db.getGenrebyId(story.getGenre_id())));
         description.setText(story.getDescription());
         AlertDialog dialog = builder.create();
         dialog.show();
