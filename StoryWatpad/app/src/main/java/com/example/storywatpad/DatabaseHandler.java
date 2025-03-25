@@ -10,6 +10,7 @@ import android.widget.Toast;
 
 
 import com.example.storywatpad.model.Chapter;
+import com.example.storywatpad.model.Comment;
 import com.example.storywatpad.model.Follower;
 import com.example.storywatpad.model.Genre;
 import com.example.storywatpad.model.Story;
@@ -795,4 +796,133 @@ public List<Story> getStoryForAuthor(int id) {
         cursor.close(); // Đóng Cursor sau khi sử dụng
         return g.getName();
     }
+    public long addComment(Comment comment) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+
+        values.put("UserId", comment.getUserId());
+        values.put("StoryId", comment.getStoryId());
+        values.put("ParentCommentId", comment.getParentCommentId());
+        values.put("Content", comment.getContent());
+        values.put("CreatedAt", System.currentTimeMillis());  // Lưu thời gian tạo
+
+        // Thêm bình luận vào cơ sở dữ liệu
+        long commentId = db.insert("Comment", null, values);
+        db.close();
+        return commentId;
+    }
+
+
+    public List<Comment> getCommentsByStoryId(int storyId) {
+        List<Comment> commentList = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        String query = "SELECT * FROM Comment WHERE StoryId = ? ORDER BY CreatedAt DESC";
+        Cursor cursor = db.rawQuery(query, new String[]{String.valueOf(storyId)});
+
+        if (cursor.moveToFirst()) {
+            do {
+                Comment comment = new Comment();
+                comment.setCommentId(cursor.getInt(0));
+                comment.setUserId(cursor.getInt(1));
+                comment.setStoryId(cursor.getInt(3));
+                comment.setParentCommentId(cursor.isNull(4) ? null : cursor.getInt(4));
+                comment.setContent(cursor.getString(5));
+                comment.setCreatedAt(cursor.getString(6));
+
+                commentList.add(comment);
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        db.close();
+        return commentList;
+    }
+    public String getUsernameById(int userId) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        String username = "";
+
+        String query = "SELECT Username FROM User WHERE userId = ?";
+        Cursor cursor = db.rawQuery(query, new String[]{String.valueOf(userId)});
+
+        if (cursor.moveToFirst()) {
+            username = cursor.getString(0);
+        }
+        cursor.close();
+        return username;
+    }
+    public void insertComment(Comment comment) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        // Get the current timestamp
+        String timestamp = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(new Date());
+
+        ContentValues contentValues = new ContentValues();
+        contentValues.put("UserId", comment.getUserId());
+        contentValues.put("ChapterId", comment.getChapterId());
+        contentValues.put("StoryId", comment.getStoryId());
+        contentValues.put("ParentCommentId", comment.getParentCommentId());
+        contentValues.put("Content", comment.getContent());
+        contentValues.put("CreatedAt", timestamp);
+        contentValues.put("UpdatedAt", timestamp);  // assuming it's the same for both
+
+        // Insert the comment
+        db.insert("Comment", null, contentValues);
+    }
+    public long insertReplyComment(Comment comment) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        // Get the current timestamp
+        String timestamp = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(new Date());
+
+        ContentValues contentValues = new ContentValues();
+        contentValues.put("UserId", comment.getUserId());
+        contentValues.put("ChapterId", comment.getChapterId());
+        contentValues.put("StoryId", comment.getStoryId());
+        contentValues.put("ParentCommentId", comment.getParentCommentId());  // This is the ParentCommentId
+        contentValues.put("Content", comment.getContent());
+        contentValues.put("CreatedAt", timestamp);
+        contentValues.put("UpdatedAt", timestamp);  // assuming it's the same for both
+
+        // Insert the comment and get the ID of the inserted row
+        long replyId = db.insert("Comment", null, contentValues);
+
+        // Close the database connection
+        db.close();
+
+        // Return the replyId
+        return replyId;
+    }
+
+
+    public List<Comment> getRepliesForComment(int parentCommentId) {
+        List<Comment> replies = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        // Query to get replies based on parentCommentId
+        String query = "SELECT * FROM Comment WHERE ParentCommentId = ?";
+        Cursor cursor = db.rawQuery(query, new String[]{String.valueOf(parentCommentId)});
+
+        if (cursor.moveToFirst()) {
+            do {
+                // Create a new Comment object from the cursor
+                Comment reply = new Comment();
+                reply.setCommentId(cursor.getInt(0));
+                reply.setUserId(cursor.getInt(1));
+                reply.setChapterId(cursor.getInt(2));
+                reply.setStoryId(cursor.getInt(3));
+                reply.setParentCommentId(cursor.getInt(4));
+                reply.setContent(cursor.getString(5));
+                reply.setCreatedAt(cursor.getString(6));
+                reply.setUpdatedAt(cursor.getString(7));
+
+                replies.add(reply);  // Add the reply to the list
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        db.close();
+        return replies;
+    }
+
+
+
 }

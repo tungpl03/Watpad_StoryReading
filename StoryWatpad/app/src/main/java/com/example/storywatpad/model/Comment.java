@@ -24,6 +24,16 @@ public class Comment {
         this.updatedAt = updatedAt;
     }
 
+    public Comment(int userId, Integer chapterId, Integer parentCommentId, Integer storyId, String content, String createdAt, String updatedAt) {
+        this.userId = userId;
+        this.chapterId = chapterId;
+        this.parentCommentId = parentCommentId;
+        this.storyId = storyId;
+        this.content = content;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+    }
+
     public int getCommentId() {
         return commentId;
     }
