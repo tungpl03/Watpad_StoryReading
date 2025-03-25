@@ -121,8 +121,8 @@ public class StoryDetailActivity extends AppCompatActivity {
 
         AppCompatButton btnLibrary = findViewById(R.id.btnLibrary);
         btnLibrary.setOnClickListener(v -> {
-            Intent intent = new Intent(StoryDetailActivity.this, BookmarkActivity.class);
-            startActivity(intent);
+            Intent intent2 = new Intent(StoryDetailActivity.this, BookmarkActivity.class);
+            startActivity(intent2);
         });
     }
 

@@ -10,6 +10,7 @@ import android.widget.Toast;
 
 
 import com.example.storywatpad.model.Chapter;
+import com.example.storywatpad.model.Follower;
 import com.example.storywatpad.model.Story;
 import com.example.storywatpad.model.StoryTag;
 import com.example.storywatpad.model.User;
@@ -18,8 +19,11 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 public class DatabaseHandler extends SQLiteOpenHelper {
     Context dbContext;
@@ -662,5 +666,76 @@ public List<Story> getStoryForAuthor(int id) {
 
 
 }
+    // Method to follow a user
+    public boolean followUser(int followerId, int followingId) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        // Check if the user is already following
+        Cursor cursor = db.rawQuery("SELECT * FROM Follower WHERE FollowerId = ? AND FollowingId = ?",
+                new String[]{String.valueOf(followerId), String.valueOf(followingId)});
+        if (cursor.getCount() > 0) {
+            // If the user is already following, return false
+            cursor.close();
+            return false;
+        }
+
+        // Insert the new follow relationship
+        ContentValues values = new ContentValues();
+        values.put("FollowerId", followerId);
+        values.put("FollowingId", followingId);
+        values.put("CreatedAt", getCurrentDateTime()); // You can use a helper method to get current datetime
+        db.insert("Follower", null, values);
+        cursor.close();
+        return true;
+    }
+    private String getCurrentDateTime() {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+        Date date = new Date();
+        return dateFormat.format(date);
+    }
+
+
+    // Check if the user is already following the author
+    public boolean isFollowing(int followerId, int followingId) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT * FROM Follower WHERE FollowerId = ? AND FollowingId = ?",
+                new String[]{String.valueOf(followerId), String.valueOf(followingId)});
+        boolean result = cursor.getCount() > 0;
+        cursor.close();
+        return result;
+    }
+
+    // Add a new follower
+    public void addFollower(Follower follower) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put("FollowerId", follower.getFollowerId());
+        values.put("FollowingId", follower.getFollowingId());
+        values.put("CreatedAt", follower.getCreatedAt());
+        db.insert("Follower", null, values);
+    }
+
+    // Remove a follower
+    public boolean unfollowUser(int currentUserId, int authorId) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        int rowsDeleted = db.delete("Follower", "FollowerId = ? AND FollowingId = ?",
+                new String[]{String.valueOf(currentUserId), String.valueOf(authorId)});
+        return rowsDeleted > 0;
+    }
+
+    // Method to get the number of followers for a user
+    public int getFollowersCount(int userId) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT COUNT(*) FROM Follower WHERE FollowingId = ?", new String[]{String.valueOf(userId)});
+        int count = 0;
+        if (cursor.moveToFirst()) {
+            count = cursor.getInt(0);
+        }
+        cursor.close();
+        return count;
+    }
+
+
+
 
 }

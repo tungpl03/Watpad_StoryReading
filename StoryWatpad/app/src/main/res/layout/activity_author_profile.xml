@@ -19,7 +19,7 @@
             <!-- Bố cục chứa hình ảnh nền và profile -->
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="334dp">
+                android:layout_height="wrap_content">
 
                 <!-- Hình nền top -->
                 <ImageView
@@ -70,6 +70,36 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/NameText" />
+                <!-- Email -->
+                <TextView
+                    android:id="@+id/txtFollow"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="2000 follow"
+                    android:textColor="#666666"
+                    android:textSize="18sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/EmailText" />
+
+                <!-- Nút Read -->
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/btnFollow"
+                    android:layout_width="wrap_content"
+                    android:layout_height="48dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/button_black"
+                    android:drawablePadding="8dp"
+                    android:gravity="center"
+                    android:text="..."
+                    android:textAlignment="center"
+                    android:textColor="@android:color/white"
+                    android:textSize="16sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/txtFollow" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -90,12 +120,11 @@
                     android:text="Author's stories" />
 
             </com.google.android.material.tabs.TabLayout>
-
-            <!-- Fragment Container for Fragments -->
             <androidx.viewpager2.widget.ViewPager2
                 android:id="@+id/vpAuthorProfile"
                 android:layout_width="match_parent"
-                android:layout_height="352dp" />
+                android:layout_height="300dp" />
+
 
         </LinearLayout>
     </ScrollView>
