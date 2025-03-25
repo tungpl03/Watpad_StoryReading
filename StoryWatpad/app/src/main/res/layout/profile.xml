@@ -16,7 +16,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <!-- Bố cục chứa hình ảnh nền và profile -->
+            <!-- Bố cục chứa hình ảnh nền và profile     -->
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
@@ -25,25 +25,34 @@
                 <ImageView
                     android:id="@+id/imageView"
                     android:layout_width="match_parent"
-                    android:layout_height="200dp"
+                    android:layout_height="250dp"
                     android:scaleType="fitXY"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:srcCompat="@drawable/logocomic" />
+                    app:srcCompat="@drawable/top_background" />
 
-                <!-- Ảnh Profile -->
+
                 <ImageView
-                    android:id="@+id/avatar"
-                    android:layout_width="100dp"
-                    android:layout_height="100dp"
-                    android:layout_marginTop="-50dp"
-                    android:background="@drawable/anhavartar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="@+id/imageView"
                     android:scaleType="centerCrop"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:srcCompat="@drawable/circles" />
+
+                <com.google.android.material.imageview.ShapeableImageView
+                    android:id="@+id/avatar"
+                    android:layout_width="150dp"
+                    android:layout_height="150dp"
+                    android:layout_marginTop="-75dp"
+                    app:shapeAppearanceOverlay="@style/roundedImageView"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/anhavartar"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/imageView"
-                    app:srcCompat="@drawable/anhavartar" />
+                    app:layout_constraintTop_toBottomOf="@id/imageView"/>
 
                 <!-- Tên -->
                 <TextView

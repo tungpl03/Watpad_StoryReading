@@ -41,12 +41,12 @@ public class AccountManageActivity extends AppCompatActivity {
 
         userList = db.getAllUser();
 
-        adapter = new AccountAdapter(this, userList);
+        adapter = new AccountAdapter(this, userList, db);
         accountList.setAdapter(adapter);
 
         back = findViewById(R.id.back);
         back.setOnClickListener(view -> {
             finish(); // Đóng Activity hiện tại để quay lại MainActivity
-        });;
+        });
     }
 }
