@@ -11,6 +11,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.AppCompatButton;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -117,6 +118,12 @@ public class StoryDetailActivity extends AppCompatActivity {
         intent.putExtra("story_id", storyId);
         intent.putExtra("chapter_id", chapterId);
         startActivity(intent);
+
+        AppCompatButton btnLibrary = findViewById(R.id.btnLibrary);
+        btnLibrary.setOnClickListener(v -> {
+            Intent intent = new Intent(StoryDetailActivity.this, BookmarkActivity.class);
+            startActivity(intent);
+        });
     }
 
     private void loadStoryDetails() {

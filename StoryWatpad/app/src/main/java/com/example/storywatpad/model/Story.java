@@ -12,6 +12,8 @@ public class Story {
     String updated_at;
     boolean isHidden;
 
+    long lastReadAt;
+
     public Story() {
     }
 
@@ -135,6 +137,14 @@ public class Story {
     else{
         return "";
         }
+    }
+
+    public long getLastReadAt() {
+        return lastReadAt;
+    }
+
+    public void setLastReadAt(long lastReadAt) {
+        this.lastReadAt = lastReadAt;
     }
 
 }

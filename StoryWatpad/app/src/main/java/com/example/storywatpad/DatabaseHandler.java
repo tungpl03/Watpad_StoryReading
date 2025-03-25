@@ -576,37 +576,45 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         db.close();
         return userList;
     }
+    public List<Story> getAllBookmarks() {
+        List<Story> bookmarks = new ArrayList<>();
+        SQLiteDatabase db = SQLiteDatabase.openDatabase(dbPath, null, SQLiteDatabase.OPEN_READWRITE);
 
-    public List<Story> getAllStoryForAd() {
-            List<Story> allStories = new ArrayList<>();
-            Cursor cursor = getCursor("SELECT * FROM Story");
-            if (cursor.moveToFirst()) {
-                do{
-                    Story st = new Story(cursor.getInt(0),
-                            cursor.getInt(1),
-                            cursor.getString(2),
-                            cursor.getString(3),
-                            cursor.getString(4),
-                            cursor.getInt(5),
-                            cursor.getString(6),
-                            cursor.getString(7),
-                            cursor.getString(8));
-                    allStories.add(st);
-                }while (cursor.moveToNext());
-            }
-            cursor.close();
+        String query = "SELECT s.*, " +
+                "       COALESCE(rh.LastReadAt, 0) AS LastReadAt " +
+                "FROM Story s " +
+                "JOIN Bookmark b ON s.StoryId = b.StoryId " +
+                "LEFT JOIN ReadingHistory rh ON s.StoryId = rh.StoryId AND rh.UserId = b.UserId";
 
-            return allStories;
+        Cursor cursor = db.rawQuery(query, null);
 
+        if (cursor.moveToFirst()) {
+            do {
+                Story story = new Story(
+                        cursor.getInt(0),  // story_id
+                        cursor.getInt(1),  // author_id
+                        cursor.getString(2), // title
+                        cursor.getString(3), // description
+                        cursor.getString(4), // CoverImageUrl
+                        cursor.getInt(5),    // genre_id
+                        cursor.getString(6), // status
+                        cursor.getString(7), // created_at
+                        cursor.getString(8)  // updated_at
+                );
 
+                story.setLastReadAt(cursor.getLong(9));  // LastReadAt từ ReadingHistory
+                bookmarks.add(story);
+            } while (cursor.moveToNext());
+        }
+
+        cursor.close();
+        db.close();
+        return bookmarks;
     }
 
-    public List<Story> getStoryForAuthor(int id) {
+    public List<Story> getAllStoryForAd() {
         List<Story> allStories = new ArrayList<>();
-        Cursor cursor = this.getReadableDatabase().rawQuery(
-                "SELECT * FROM Story WHERE AuthorId = ? and isHidden = 0",
-                new String[]{String.valueOf(id)}
-        );
+        Cursor cursor = getCursor("SELECT * FROM Story");
         if (cursor.moveToFirst()) {
             do{
                 Story st = new Story(cursor.getInt(0),
@@ -617,8 +625,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                         cursor.getInt(5),
                         cursor.getString(6),
                         cursor.getString(7),
-                        cursor.getString(8),
-                        Boolean.parseBoolean(cursor.getString(9)));
+                        cursor.getString(8));
                 allStories.add(st);
             }while (cursor.moveToNext());
         }
@@ -627,5 +634,33 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         return allStories;
 
 
+}
+public List<Story> getStoryForAuthor(int id) {
+    List<Story> allStories = new ArrayList<>();
+    Cursor cursor = this.getReadableDatabase().rawQuery(
+            "SELECT * FROM Story WHERE AuthorId = ? and isHidden = 0",
+            new String[]{String.valueOf(id)}
+    );
+    if (cursor.moveToFirst()) {
+        do{
+            Story st = new Story(cursor.getInt(0),
+                    cursor.getInt(1),
+                    cursor.getString(2),
+                    cursor.getString(3),
+                    cursor.getString(4),
+                    cursor.getInt(5),
+                    cursor.getString(6),
+                    cursor.getString(7),
+                    cursor.getString(8),
+                    Boolean.parseBoolean(cursor.getString(9)));
+            allStories.add(st);
+        }while (cursor.moveToNext());
     }
+    cursor.close();
+
+    return allStories;
+
+
+}
+
 }

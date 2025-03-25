@@ -60,6 +60,7 @@
             android:exported="false"/>
         <activity android:name=".view.StoryManageActivity"
             android:exported="false"/>
+        <activity android:name=".view.BookmarkActivity" />
 
         <activity
             android:name=".view.LoginActivity"
