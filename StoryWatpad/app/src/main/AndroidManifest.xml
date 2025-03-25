@@ -63,21 +63,8 @@
             android:exported="false"/>
         <activity android:name=".view.BookmarkActivity"
             android:exported="false"
-            android:name=".view.ChangePasswordActivity" />
+             />
 
-        <activity
-            android:exported="false"
-            android:name=".view.ChangeProfileActivity" />
-
-        <activity
-            android:exported="false"
-            android:name=".view.AdminPageActivity" />
-        <activity
-            android:exported="false"
-            android:name=".view.AccountManageActivity" />
-        <activity
-            android:exported="false"
-            android:name=".view.StoryManageActivity" />
         <activity
             android:exported="false"
             android:name=".view.StatisticActivity" />
