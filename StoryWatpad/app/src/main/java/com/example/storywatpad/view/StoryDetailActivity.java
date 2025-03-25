@@ -97,6 +97,7 @@ public class StoryDetailActivity extends AppCompatActivity {
         if (story != null) {
             int authorId = story.getAuthor_id();
             Intent intent = new Intent(StoryDetailActivity.this, AuthorProfileActivity.class);
+            intent.putExtra("story_id", story.getStory_id());
             intent.putExtra("author_id", authorId);
             startActivity(intent);
         }

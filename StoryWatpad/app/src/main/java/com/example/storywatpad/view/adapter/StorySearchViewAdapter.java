@@ -1,6 +1,7 @@
 package com.example.storywatpad.view.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +15,7 @@ import com.example.storywatpad.DatabaseHandler;
 import com.example.storywatpad.R;
 import com.example.storywatpad.model.Story;
 import com.example.storywatpad.model.User;
+import com.example.storywatpad.view.StoryDetailActivity;
 
 import java.util.List;
 
@@ -73,6 +75,12 @@ public class StorySearchViewAdapter extends RecyclerView.Adapter<StorySearchView
         } else {
             holder.imgStory.setImageResource(R.drawable.logocomic); // Ảnh mặc định
         }
+        // Thiết lập sự kiện click để mở StoryDetailActivity
+        holder.itemView.setOnClickListener(v -> {
+            Intent intent = new Intent(context, StoryDetailActivity.class);
+            intent.putExtra("story_id", story.getStory_id());
+            context.startActivity(intent);
+        });
     }
 
     @Override

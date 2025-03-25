@@ -3,6 +3,7 @@ package com.example.storywatpad.view;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -138,6 +139,17 @@ public class AuthorProfileActivity extends AppCompatActivity {
                 }).attach();
             }
         }
+        // Khai báo nút btnBack
+        ImageButton btnBack = findViewById(R.id.btnBack);
+
+        // Xử lý sự kiện khi bấm nút Back
+        btnBack.setOnClickListener(view -> {
+            Intent intent = new Intent(AuthorProfileActivity.this, StoryDetailActivity.class);
+            int storyId = getIntent().getIntExtra("story_id", -1);
+            intent.putExtra("story_id", storyId);
+            startActivity(intent);
+            finish();  // Kết thúc StoryDetailActivity
+        });
     }
 
     private void Init() {

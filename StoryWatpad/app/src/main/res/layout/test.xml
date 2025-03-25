@@ -1,5 +1,4 @@
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -27,12 +26,31 @@
                     android:layout_width="match_parent"
                     android:layout_height="200dp"
                     android:scaleType="fitXY"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
                     app:srcCompat="@drawable/top_background" />
 
+                <!-- Nút Back nằm trên hình nền -->
+
                 <!-- Ảnh Profile -->
+
+                <ImageButton
+                    android:id="@+id/btnBack"
+                    android:layout_width="65dp"
+                    android:layout_height="60dp"
+                    android:layout_marginTop="16dp"
+                    android:clickable="true"
+                    android:contentDescription="Back"
+                    android:focusable="true"
+                    android:padding="4dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.046"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:background="@android:color/transparent"
+                    app:srcCompat="@drawable/arrow" />
+
                 <ImageView
                     android:id="@+id/avatar"
                     android:layout_width="100dp"
@@ -70,20 +88,21 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/NameText" />
+
                 <!-- Email -->
                 <TextView
                     android:id="@+id/txtFollow"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
-                    android:text="lionfischer@gmail.com"
+                    android:text="2000 follow"
                     android:textColor="#666666"
                     android:textSize="18sp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/EmailText" />
 
-                <!-- Nút Read -->
+                <!-- Nút Follow -->
                 <androidx.appcompat.widget.AppCompatButton
                     android:id="@+id/btnFollow"
                     android:layout_width="wrap_content"
@@ -120,12 +139,11 @@
                     android:text="Author's stories" />
 
             </com.google.android.material.tabs.TabLayout>
+
             <androidx.viewpager2.widget.ViewPager2
                 android:id="@+id/vpAuthorProfile"
                 android:layout_width="match_parent"
                 android:layout_height="300dp" />
-
-
         </LinearLayout>
     </ScrollView>
 
