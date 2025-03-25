@@ -16,9 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.storywatpad.DatabaseHandler;
 import com.example.storywatpad.R;
-import com.example.storywatpad.model.Chapter;
 import com.example.storywatpad.model.User;
-import com.example.storywatpad.view.AccountManageActivity;
 
 import java.io.File;
 import java.util.List;

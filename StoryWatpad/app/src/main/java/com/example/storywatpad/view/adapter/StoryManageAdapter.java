@@ -20,8 +20,6 @@ import com.example.storywatpad.model.Story;
 import com.example.storywatpad.model.User;
 import com.google.android.material.imageview.ShapeableImageView;
 
-import org.w3c.dom.Text;
-
 import java.io.File;
 import java.util.List;
 

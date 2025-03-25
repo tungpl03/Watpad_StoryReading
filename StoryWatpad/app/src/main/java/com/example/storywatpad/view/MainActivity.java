@@ -1,5 +1,4 @@
 package com.example.storywatpad.view;
-import com.example.storywatpad.view.BookmarkActivity;
 
 
 import android.content.Intent;
@@ -8,12 +7,11 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 
 import com.example.storywatpad.model.User;
-import androidx.activity.EdgeToEdge;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -21,7 +19,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.storywatpad.DatabaseHandler;
 import com.example.storywatpad.R;
-import com.example.storywatpad.model.ReadingHistory;
 import com.example.storywatpad.model.Story;
 import com.example.storywatpad.view.adapter.StoryAdapter;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
