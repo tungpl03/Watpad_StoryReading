@@ -39,6 +39,9 @@ public class BookmarkAdapter extends RecyclerView.Adapter<BookmarkAdapter.Bookma
         Story story = bookmarkList.get(position);
         holder.tvTitle.setText(story.getTitle());
 
+
+
+
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy - HH:mm", Locale.getDefault());
         String formattedDate = sdf.format(new Date(story.getLastReadAt()));
         holder.tvLastReadAt.setText("Đọc lần cuối: " + formattedDate);

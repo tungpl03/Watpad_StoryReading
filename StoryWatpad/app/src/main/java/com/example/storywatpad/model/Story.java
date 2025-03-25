@@ -11,6 +11,8 @@ public class Story {
     String created_at;
     String updated_at;
 
+    long lastReadAt;
+
     public Story() {
     }
 
@@ -104,6 +106,14 @@ public class Story {
     else{
         return "";
         }
+    }
+
+    public long getLastReadAt() {
+        return lastReadAt;
+    }
+
+    public void setLastReadAt(long lastReadAt) {
+        this.lastReadAt = lastReadAt;
     }
 
 }

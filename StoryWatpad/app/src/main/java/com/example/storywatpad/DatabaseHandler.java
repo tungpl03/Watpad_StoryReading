@@ -297,4 +297,40 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         db.close();
     }
 
+    public List<Story> getAllBookmarks() {
+        List<Story> bookmarks = new ArrayList<>();
+        SQLiteDatabase db = SQLiteDatabase.openDatabase(dbPath, null, SQLiteDatabase.OPEN_READWRITE);
+
+        String query = "SELECT s.*, " +
+                "       COALESCE(rh.LastReadAt, 0) AS LastReadAt " +
+                "FROM Story s " +
+                "JOIN Bookmark b ON s.StoryId = b.StoryId " +
+                "LEFT JOIN ReadingHistory rh ON s.StoryId = rh.StoryId AND rh.UserId = b.UserId";
+
+        Cursor cursor = db.rawQuery(query, null);
+
+        if (cursor.moveToFirst()) {
+            do {
+                Story story = new Story(
+                        cursor.getInt(0),  // story_id
+                        cursor.getInt(1),  // author_id
+                        cursor.getString(2), // title
+                        cursor.getString(3), // description
+                        cursor.getString(4), // CoverImageUrl
+                        cursor.getInt(5),    // genre_id
+                        cursor.getString(6), // status
+                        cursor.getString(7), // created_at
+                        cursor.getString(8)  // updated_at
+                );
+
+                story.setLastReadAt(cursor.getLong(9));  // LastReadAt từ ReadingHistory
+                bookmarks.add(story);
+            } while (cursor.moveToNext());
+        }
+
+        cursor.close();
+        db.close();
+        return bookmarks;
+    }
+
 }

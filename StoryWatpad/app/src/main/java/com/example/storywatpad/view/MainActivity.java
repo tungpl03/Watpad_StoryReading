@@ -1,4 +1,6 @@
 package com.example.storywatpad.view;
+import com.example.storywatpad.view.BookmarkActivity;
+
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -8,6 +10,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 
 import com.example.storywatpad.model.User;
 import androidx.activity.EdgeToEdge;
@@ -80,10 +83,16 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
                 return true;
             }
+            if (item.getItemId() == R.id.bookList) {
+                // Chuyển sang BookmarkActivity khi bấm vào Booklist
+                Intent intent = new Intent(MainActivity.this, BookmarkActivity.class);
+                startActivity(intent);
+                return true;
+            }
             return false;
         });
 
-        
+
         LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         rvHotStory.setLayoutManager(layoutManager);
         rvHotStory.setNestedScrollingEnabled(false);  // Cho phép cuộn ngang nếu danh sách dài hơn màn hình
@@ -164,5 +173,5 @@ public class MainActivity extends AppCompatActivity {
 //        cursor.close(); // Đóng Cursor sau khi sử dụng
 //        return user;
 //    }
-    
+
 }
