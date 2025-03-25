@@ -46,7 +46,13 @@ public class StoryDetailActivity extends AppCompatActivity {
         ImageButton btnBack = findViewById(R.id.btnBack);
 
         // Xử lý sự kiện khi bấm nút Back
-        btnBack.setOnClickListener(view -> finish()); // Đóng Activity hiện tại để quay lại MainActivity
+        btnBack.setOnClickListener(view -> {
+            Intent intent = new Intent(StoryDetailActivity.this, MainActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK); // Đảm bảo quay về MainActivity và không giữ lại các Activity trước đó
+            startActivity(intent);
+            finish();  // Kết thúc StoryDetailActivity
+        });
+
 
         // Nhận storyId từ Intent
         storyId = getIntent().getIntExtra("story_id", -1);
