@@ -374,6 +374,22 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         db.close();
         return chapter;
     }
+    public Chapter getChapterById(int chapterId) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT * FROM Chapter WHERE ChapterId = ?", new String[]{String.valueOf(chapterId)});
+        Chapter chapter = null;
+        if (cursor.moveToFirst()) {
+            int storyId = cursor.getInt(cursor.getColumnIndexOrThrow("StoryId"));
+            String title = cursor.getString(cursor.getColumnIndexOrThrow("Title"));
+            String content = cursor.getString(cursor.getColumnIndexOrThrow("Content"));
+            String createdAt = cursor.getString(cursor.getColumnIndexOrThrow("CreatedAt"));
+            String updatedAt = cursor.getString(cursor.getColumnIndexOrThrow("UpdatedAt"));
+            chapter = new Chapter(chapterId, storyId, title, content, createdAt, updatedAt);
+        }
+        cursor.close();
+        db.close();
+        return chapter;
+    }
     public String getStoryTitleById(int storyId) {
         SQLiteDatabase db = this.getReadableDatabase();
         String title = "";
@@ -929,6 +945,117 @@ public List<Story> getStoryForAuthor(int id) {
             cursor.close();
         }
         return comments;
+    }
+
+    public void deleteStory(int storyId) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        // Xóa các chương liên quan trước
+        db.delete("chapter", "StoryId = ?", new String[]{String.valueOf(storyId)});
+        // Xóa truyện
+        db.delete("story", "StoryId = ?", new String[]{String.valueOf(storyId)});
+        db.close();
+    }
+
+    public void addStory(String title, String description, String coverImageUrl, int genreId, int authorId) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put("title", title);
+        values.put("description", description);
+        values.put("coverimageurl", coverImageUrl);
+        values.put("genreid", genreId);
+        values.put("authorid", authorId);
+        db.insert("story", null, values);
+        db.close();
+    }
+
+    // Cập nhật truyện
+    public void updateStory(Story story) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put("title", story.getTitle());
+        values.put("description", story.getDescription());
+        values.put("coverimageurl", story.getCoverImageUrl());
+        values.put("genreid", story.getGenre_id());
+        values.put("authorid", story.getAuthor_id());
+        db.update("story", values, "storyid = ?", new String[]{String.valueOf(story.getStory_id())});
+        db.close();
+    }
+
+    public List<Genre> getAllGenres() {
+        List<Genre> genreList = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT * FROM Genre", null);
+        if (cursor.moveToFirst()) {
+            do {
+                int genreId = cursor.getInt(cursor.getColumnIndexOrThrow("GenreId"));
+                String name = cursor.getString(cursor.getColumnIndexOrThrow("Name"));
+                genreList.add(new Genre(genreId, name,null));
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        db.close();
+        return genreList;
+    }
+
+    // Thêm chương mới
+    public void addChapter(int storyId, String title, String content, String createdAt, String updatedAt) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put("storyid", storyId);
+        values.put("title", title);
+        values.put("content", content);
+        values.put("createdat", createdAt);
+        values.put("updatedat", updatedAt);
+        db.insert("chapter", null, values);
+        db.close();
+    }
+    // Cập nhật chương
+    public void updateChapter(Chapter chapter) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put("StoryId", chapter.getStoryId());
+        values.put("Title", chapter.getTitle());
+        values.put("Content", chapter.getContent());
+        values.put("CreatedAt", chapter.getCreatedAt());
+        values.put("UpdatedAt", chapter.getUpdatedAt());
+        db.update("Chapter", values, "ChapterId = ?", new String[]{String.valueOf(chapter.getChapterId())});
+        db.close();
+    }
+
+    // Xóa chương
+    public void deleteChapter(int chapterId) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete("Chapter", "ChapterId = ?", new String[]{String.valueOf(chapterId)});
+        db.close();
+    }
+    public int getChapterCount(int storyId) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(
+                "SELECT COUNT(1) FROM Chapter WHERE StoryId = ?",
+                new String[]{String.valueOf(storyId)}
+        );
+        int count = 0;
+        if (cursor.moveToFirst()) {
+            count = cursor.getInt(0);
+        }
+        cursor.close();
+        db.close();
+        return count;
+    }
+
+    public String getGenreName(int genreId) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(
+                "SELECT Name  FROM  Genre WHERE  GenreId = ?",
+                new String[]{String.valueOf(genreId)}
+        );
+        String genreName = "Unknown";
+        if (cursor.moveToFirst()) {
+            genreName = cursor.getString(0);
+        }
+        cursor.close();
+        db.close();
+        return genreName;
     }
 
 

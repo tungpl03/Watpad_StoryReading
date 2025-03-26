@@ -91,6 +91,12 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
                 return true;
             }
+            if (item.getItemId() == R.id.write) {
+                // Chuyển sang SearchActivity khi bấm vào Search
+                Intent intent1 = new Intent(MainActivity.this, MyStoryActivity.class);
+                startActivity(intent1);
+                return true;
+            }
             return false;
         });
 

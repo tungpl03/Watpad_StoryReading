@@ -12,17 +12,21 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.storywatpad.R;
 import com.example.storywatpad.model.Chapter;
-import com.example.storywatpad.view.ChapterDetailActivity;
+import com.example.storywatpad.model.Story;
+import com.example.storywatpad.view.MyStoryDetailsActivity;
+import com.example.storywatpad.view.UpdateChapterActivity;
 
 import java.util.List;
 
 public class ChapterAdapter extends RecyclerView.Adapter<ChapterAdapter.ChapterViewHolder> {
     private Context context;
-    private List<Chapter> chapters;
+    private List<Chapter> chapterList;
+    private OnItemClickListener listener;
 
-    public ChapterAdapter(Context context, List<Chapter> chapters) {
+    public ChapterAdapter(Context context, List<Chapter> chapterList, OnItemClickListener listener) {
         this.context = context;
-        this.chapters = chapters;
+        this.chapterList = chapterList;
+        this.listener = listener;
     }
 
     @NonNull
@@ -34,26 +38,27 @@ public class ChapterAdapter extends RecyclerView.Adapter<ChapterAdapter.ChapterV
 
     @Override
     public void onBindViewHolder(@NonNull ChapterViewHolder holder, int position) {
-        Chapter chapter = chapters.get(position);
+        Chapter chapter = chapterList.get(position);
         holder.tvChapterTitle.setText(chapter.getTitle());
         holder.tvChapterDate.setText(chapter.getCreatedAt());
 
-        // Thêm sự kiện click vào từng chapter
+        // Thêm sự kiện click cho item
         holder.itemView.setOnClickListener(v -> {
-            // Khi nhấn vào một phần tử, chuyển sang ChapterDetailActivity
-            Intent intent = new Intent(context, ChapterDetailActivity.class);
-            intent.putExtra("story_id", chapter.getStoryId());
-            intent.putExtra("chapter_id", chapter.getChapterId());  // Gửi chapterId
-            context.startActivity(intent);
+            if (listener != null) {
+                listener.onItemClick(chapter);
+            }
         });
     }
 
     @Override
     public int getItemCount() {
-        return chapters.size();
+        return chapterList.size();
+    }
+    public interface OnItemClickListener {
+        void onItemClick(Chapter chapter); // Truyền đối tượng Story thay vì chỉ storyId
     }
 
-    public static class ChapterViewHolder extends RecyclerView.ViewHolder {
+    class ChapterViewHolder extends RecyclerView.ViewHolder {
         TextView tvChapterTitle, tvChapterDate;
 
         public ChapterViewHolder(@NonNull View itemView) {

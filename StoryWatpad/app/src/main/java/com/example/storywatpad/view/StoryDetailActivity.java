@@ -167,12 +167,12 @@ public class StoryDetailActivity extends AppCompatActivity {
             }
         }
     }
-
+    private ChapterAdapter.OnItemClickListener listener;
     private void loadChapters() {
         List<Chapter> chapters = databaseHandler.getChaptersByStoryId(storyId);
         tvTotalChapters.setText(chapters.size() + " parts");
 
-        chapterAdapter = new ChapterAdapter(this, chapters);
+        chapterAdapter = new ChapterAdapter(this, chapters,listener);
         rvChapters.setLayoutManager(new LinearLayoutManager(this));
         rvChapters.setAdapter(chapterAdapter);
     }

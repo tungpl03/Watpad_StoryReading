@@ -21,6 +21,21 @@
         android:theme="@style/Theme.StoryWatpad"
         tools:targetApi="31">
         <activity
+            android:name=".view.UpdateChapterActivity"
+            android:exported="false" />
+        <activity
+            android:name=".view.AddChapterActivity"
+            android:exported="false" />
+        <activity
+            android:name=".view.CreateStoryActivity"
+            android:exported="false" />
+        <activity
+            android:name=".view.MyStoryDetailsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".view.MyStoryActivity"
+            android:exported="false" />
+        <activity
             android:name=".view.ChapterCommentsActivity"
             android:exported="false" />
         <activity
