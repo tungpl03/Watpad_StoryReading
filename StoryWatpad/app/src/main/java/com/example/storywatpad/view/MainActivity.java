@@ -1,16 +1,17 @@
 package com.example.storywatpad.view;
 
+
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.TextView;
 
+
 import com.example.storywatpad.model.User;
-import androidx.activity.EdgeToEdge;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -18,7 +19,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.storywatpad.DatabaseHandler;
 import com.example.storywatpad.R;
-import com.example.storywatpad.model.ReadingHistory;
 import com.example.storywatpad.model.Story;
 import com.example.storywatpad.view.adapter.StoryAdapter;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -32,7 +32,6 @@ public class MainActivity extends AppCompatActivity {
     RecyclerView rvStory,rvHotStory;
     List<Story> arrStory = new ArrayList<>();
     List<Story> hotStories = new ArrayList<>();
-    List<ReadingHistory> readingHistories = new ArrayList<>();
     StoryAdapter adapter,hotStoryAdapter;
     private DatabaseHandler db = new DatabaseHandler(this);
     SharedPreferences SP;
@@ -74,16 +73,28 @@ public class MainActivity extends AppCompatActivity {
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigationView);
 
         bottomNavigationView.setOnItemSelectedListener(item -> {
+            if (item.getItemId() == R.id.home) {
+                // Chuyển sang SearchActivity khi bấm vào Search
+                Intent intent = new Intent(MainActivity.this, MainActivity.class);
+                startActivity(intent);
+                return true;
+            }
             if (item.getItemId() == R.id.search) {
                 // Chuyển sang SearchActivity khi bấm vào Search
                 Intent intent = new Intent(MainActivity.this, SearchActivity.class);
                 startActivity(intent);
                 return true;
             }
+            if (item.getItemId() == R.id.bookList) {
+                // Chuyển sang BookmarkActivity khi bấm vào Booklist
+                Intent intent = new Intent(MainActivity.this, BookmarkActivity.class);
+                startActivity(intent);
+                return true;
+            }
             return false;
         });
 
-        
+
         LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         rvHotStory.setLayoutManager(layoutManager);
         rvHotStory.setNestedScrollingEnabled(false);  // Cho phép cuộn ngang nếu danh sách dài hơn màn hình
@@ -97,7 +108,7 @@ public class MainActivity extends AppCompatActivity {
     private List<Story> getHotStories() {
         List<Story> hotStories = new ArrayList<>();
         Cursor cursor = db.getCursor("SELECT Story.*,sum(like) as totallike" +
-                " FROM Story JOIN ReadingHistory WHERE Story.StoryId = ReadingHistory.StoryId" +
+                " FROM Story JOIN ReadingHistory WHERE Story.StoryId = ReadingHistory.StoryId and Story.isHidden = 0" +
                 " GROUP BY Story.StoryId" +
                 " ORDER BY totallike desc;");
         if (cursor.moveToFirst()) {
@@ -121,7 +132,7 @@ public class MainActivity extends AppCompatActivity {
 
     private List<Story> getAllStories() {
         List<Story> allStories = new ArrayList<>();
-        Cursor cursor = db.getCursor("SELECT * FROM Story");
+        Cursor cursor = db.getCursor("SELECT * FROM Story where isHidden = 0");
         if (cursor.moveToFirst()) {
             do{
                 Story st = new Story(cursor.getInt(0),
@@ -164,5 +175,5 @@ public class MainActivity extends AppCompatActivity {
 //        cursor.close(); // Đóng Cursor sau khi sử dụng
 //        return user;
 //    }
-    
+
 }

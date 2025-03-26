@@ -10,8 +10,32 @@ public class Story {
     String status;
     String created_at;
     String updated_at;
+    boolean isHidden;
+
+    long lastReadAt;
 
     public Story() {
+    }
+
+    public boolean isHidden() {
+        return isHidden;
+    }
+
+    public void setHidden(boolean hidden) {
+        isHidden = hidden;
+    }
+
+    public Story(int story_id, int author_id, String title, String description, String coverImageUrl, int genre_id, String status, String created_at, String updated_at, boolean isHidden) {
+        this.story_id = story_id;
+        this.author_id = author_id;
+        this.title = title;
+        this.description = description;
+        CoverImageUrl = coverImageUrl;
+        this.genre_id = genre_id;
+        this.status = status;
+        this.created_at = created_at;
+        this.updated_at = updated_at;
+        this.isHidden = isHidden;
     }
 
     public Story(int story_id, int author_id, String title, String description, String coverImageUrl, int genre_id, String status, String created_at, String updated_at) {
@@ -25,7 +49,16 @@ public class Story {
         this.created_at = created_at;
         this.updated_at = updated_at;
     }
-
+    // Constructor dành riêng cho tìm kiếm (bỏ created_at, updated_at)
+    public Story(int story_id, int author_id, String title, String description, String coverImageUrl, int genre_id, String status) {
+        this.story_id = story_id;
+        this.author_id = author_id;
+        this.title = title;
+        this.description = description;
+        this.CoverImageUrl = coverImageUrl;
+        this.genre_id = genre_id;
+        this.status = status;
+    }
     public int getStory_id() {
         return story_id;
     }
@@ -104,6 +137,14 @@ public class Story {
     else{
         return "";
         }
+    }
+
+    public long getLastReadAt() {
+        return lastReadAt;
+    }
+
+    public void setLastReadAt(long lastReadAt) {
+        this.lastReadAt = lastReadAt;
     }
 
 }

@@ -2,7 +2,6 @@ package com.example.storywatpad.view.adapter;
 
 import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,7 +14,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.storywatpad.DatabaseHandler;
 import com.example.storywatpad.R;
 import com.example.storywatpad.model.Story;
-import com.example.storywatpad.view.MainActivity;
 import com.example.storywatpad.view.StoryDetailActivity;
 
 import java.util.List;

@@ -1,5 +1,6 @@
 package com.example.storywatpad.view;
 
+
 import android.content.ContextWrapper;
 import android.content.Intent;
 import android.content.SharedPreferences;

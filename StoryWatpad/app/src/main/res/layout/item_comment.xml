@@ -1,0 +1,78 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <TextView
+        android:id="@+id/tvUsername"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="User Name"
+        android:textStyle="bold"
+        android:textColor="@color/black"
+        android:textSize="14sp" />
+
+    <TextView
+        android:id="@+id/tvCommentContent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="This is a comment"
+        android:textSize="14sp"
+        android:textColor="@color/black"
+        android:layout_marginTop="8dp" />
+
+    <!-- Reply Button -->
+    <TextView
+        android:id="@+id/btnReply"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Reply"
+        android:textColor="@color/blue"
+        android:textSize="14sp"
+        android:layout_marginTop="8dp" />
+
+    <!-- Reply input field (Initially hidden) -->
+    <LinearLayout
+        android:id="@+id/replyLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="gone"
+        android:layout_marginTop="8dp">
+
+        <TextView
+            android:id="@+id/tvReplyToUser"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Replying to: User Name"
+            android:textColor="@color/black"
+            android:textSize="14sp" />
+
+        <androidx.appcompat.widget.AppCompatEditText
+            android:id="@+id/etReplyContent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:hint="Write your reply here"
+            android:padding="10dp"
+            android:background="@drawable/rounded_edit_text" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btnSubmitReply"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Submit"
+            android:textColor="@android:color/white"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/button_black" />
+    </LinearLayout>
+
+    <!-- RecyclerView for replies (initially hidden) -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvReplies"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:visibility="gone" />
+</LinearLayout>
